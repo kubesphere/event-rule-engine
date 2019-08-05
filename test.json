@@ -1,0 +1,29 @@
+{
+    "metadata": {
+        "name": "kube-controller-manager-ks-allinone.15ab1937227fa112",
+        "namespace": "kube-system",
+        "selfLink": "/api/v1/namespaces/kube-system/events/kube-controller-manager-ks-allinone.15ab1937227fa112",
+        "uid": "942316e5-9664-11e9-98b0-525422dd65e3",
+        "resourceVersion": "1032254",
+        "creationTimestamp": "2019-06-24T09:43:53Z"
+    },
+    "involvedObject": {
+        "kind": "Pod",
+        "namespace": "kube-system",
+        "name": "kube-controller-manager-ks-allinone",
+        "uid": "7f650b3dbe3ab98c881ec875c0c08cc0",
+        "apiVersion": "v1",
+        "fieldPath": "spec.containers{kube-controller-manager}"
+    },
+    "reason": "Pulled",
+    "message": "Container image \"dockerhub.qingcloud.com/google_containers/hyperkube:v1.13.5\" already present on machine",
+    "source": {
+        "component": "kubelet",
+        "host": "ks-allinone"
+    },
+    "firstTimestamp": "2019-06-24T09:43:40Z",
+    "lastTimestamp": "2019-06-24T09:43:40Z",
+    "count": 20,
+    "type": "Normal",
+    "open": true
+}
