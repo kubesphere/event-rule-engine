@@ -4,6 +4,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+        "github.com/kubesphere/event-rule-engine/visitor"
 	"io/ioutil"
 	"os"
 
@@ -31,7 +32,7 @@ func Flatten(m map[string]interface{}) map[string]interface{} {
 var fm map[string]interface{}
 
 func executor(in string) {
-	fmt.Printf("Answer: %v\n", EventRuleEvaluate(fm, in))
+	fmt.Printf("Answer: %v\n", visitor.EventRuleEvaluate(fm, in))
 }
 
 func completer(in prompt.Document) []prompt.Suggest {

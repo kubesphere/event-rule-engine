@@ -5,7 +5,7 @@ import (
 	"strings"
 	"strconv"
 
-	"./parser"
+	"github.com/kubesphere/event-rule-engine/visitor/parser"
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
 
