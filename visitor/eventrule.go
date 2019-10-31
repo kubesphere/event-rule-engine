@@ -1,12 +1,13 @@
-package main
+package visitor
 
 import (
-	"fmt"
-	"strings"
-	"strconv"
-
 	"github.com/kubesphere/event-rule-engine/visitor/parser"
+
 	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/golang/glog"
+
+	"strconv"
+	"strings"
 )
 
 type Visitor struct {
@@ -27,7 +28,8 @@ func (l *Visitor) pushValue(i bool) {
 
 func (l *Visitor) popValue() bool {
 	if len(l.valueStack) < 1 {
-		panic("valueStack is empty unable to pop")
+		glog.Errorf("valueStack is empty unable to pop")
+		return false
 	}
 
 	// Get the last value from the stack.
@@ -49,7 +51,7 @@ func (v *Visitor) VisitStart(ctx *parser.StartContext) interface{} {
 }
 
 func (v *Visitor) VisitAndOr(ctx *parser.AndOrContext) interface{} {
-	fmt.Printf("VisitAndOr\n")
+	glog.Info("VisitAndOr")
 
 	//push expression result to stack
 	v.visitRule(ctx.Expression(0))
@@ -72,7 +74,7 @@ func (v *Visitor) VisitAndOr(ctx *parser.AndOrContext) interface{} {
 }
 
 func (v *Visitor) VisitNot(ctx *parser.NotContext) interface{} {
-	fmt.Printf("VisitNot\n")
+	glog.Info("VisitNot")
 
 	v.visitRule(ctx.Expression())
 
@@ -90,13 +92,21 @@ func (v *Visitor) VisitStringEqualContains(ctx *parser.StringEqualContainsContex
 	strValue = strings.TrimLeft(strValue, `"`)
 	strValue = strings.TrimRight(strValue, `"`)
 
-	fmt.Printf("VisitStringEqualContains %s %d %s\n", varName, t.GetTokenType(), strValue)
+	glog.Info("VisitStringEqualContains %s %d %s", varName, t.GetTokenType(), strValue)
 
 	switch t.GetTokenType() {
 	case parser.EventRuleParserEQU:
-		v.pushValue(v.m[varName].(string) == strValue)
+		if v.m[varName] == nil {
+			v.pushValue(false)
+		} else {
+			v.pushValue(v.m[varName].(string) == strValue)
+		}
 	case parser.EventRuleParserCONTAINS:
-		v.pushValue(strings.Contains(v.m[varName].(string), strValue))
+		if v.m[varName] == nil {
+			v.pushValue(false)
+		} else {
+			v.pushValue(strings.Contains(v.m[varName].(string), strValue))
+		}
 	}
 
 	return nil
@@ -114,7 +124,13 @@ func (v *Visitor) VisitStringIn(ctx *parser.StringInContext) interface{} {
 		strValues = append(strValues, strValue)
 	}
 
-	fmt.Printf("VisitStringIn %s in %v\n", varName, strValues)
+	glog.Info("VisitStringIn %s in %v", varName, strValues)
+
+	if v.m[varName] == nil {
+		v.pushValue(false)
+
+		return nil
+	}
 
 	varValue := v.m[varName].(string)
 
@@ -135,13 +151,19 @@ func (v *Visitor) VisitCompareNumber(ctx *parser.CompareNumberContext) interface
 	varName := ctx.VAR().GetText()
 	numValue, err := strconv.ParseFloat(ctx.NUMBER().GetText(), 64)
 	if err != nil {
-		panic(err.Error())
+		glog.Errorf("number err, key: %s, value: %s, err: %s", varName, ctx.NUMBER().GetText(), err.Error())
+		return nil
 	}
 	var t antlr.Token = ctx.GetOp()
 
+	if v.m[varName] == nil {
+		v.pushValue(false)
+		return nil
+	}
+
 	varValue := v.m[varName].(float64)
 
-	fmt.Printf("VisitCompareNumber %s %d %v\n", varName, t.GetTokenType(), numValue)
+	glog.Info("VisitCompareNumber %s %d %v", varName, t.GetTokenType(), numValue)
 
 	switch t.GetTokenType() {
 	case parser.EventRuleParserEQU:
@@ -163,9 +185,13 @@ func (v *Visitor) VisitCompareNumber(ctx *parser.CompareNumberContext) interface
 
 func (v *Visitor) VisitVariable(ctx *parser.VariableContext) interface{} {
 	varName := ctx.VAR().GetText()
-	fmt.Printf("VisitVariable %v\n", varName)
+	glog.Info("VisitVariable %v", varName)
 
-	v.pushValue(v.m[varName].(bool))
+	if v.m[varName] == nil {
+		v.pushValue(false)
+	} else {
+		v.pushValue(v.m[varName].(bool))
+	}
 
 	return nil
 }
