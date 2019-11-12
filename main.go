@@ -3,8 +3,8 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/wanjunlei/event-rule-engine/visitor"
 	"fmt"
-	"event-rule-engine/visitor"
 	"io/ioutil"
 	"os"
 
@@ -14,25 +14,30 @@ import (
 // Flatten takes a map and returns a new one where nested maps are replaced
 // by dot-delimited keys.
 func Flatten(m map[string]interface{}) map[string]interface{} {
-    o := make(map[string]interface{})
-    for k, v := range m {
-            switch child := v.(type) {
-            case map[string]interface{}:
-                    nm := Flatten(child)
-                    for nk, nv := range nm {
-                            o[k+"."+nk] = nv
-                    }
-            default:
-                    o[k] = v
-            }
-    }
-    return o
+	o := make(map[string]interface{})
+	for k, v := range m {
+		switch child := v.(type) {
+		case map[string]interface{}:
+			nm := Flatten(child)
+			for nk, nv := range nm {
+				o[k+"."+nk] = nv
+			}
+		default:
+			o[k] = v
+		}
+	}
+	return o
 }
 
 var fm map[string]interface{}
 
 func executor(in string) {
-	fmt.Printf("Answer: %v\n", visitor.EventRuleEvaluate(fm, in))
+	err, res := visitor.EventRuleEvaluate(fm, in)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("Answer: %v\n", res)
 }
 
 func completer(in prompt.Document) []prompt.Suggest {
