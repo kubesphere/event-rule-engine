@@ -4,7 +4,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/kubesphere/event-rule-engine/visitor"
+	"event-rule-engine/visitor"
 	"io/ioutil"
 	"os"
 
@@ -14,19 +14,19 @@ import (
 // Flatten takes a map and returns a new one where nested maps are replaced
 // by dot-delimited keys.
 func Flatten(m map[string]interface{}) map[string]interface{} {
-	o := make(map[string]interface{})
-	for k, v := range m {
-		switch child := v.(type) {
-		case map[string]interface{}:
-			nm := Flatten(child)
-			for nk, nv := range nm {
-				o[k+"."+nk] = nv
-			}
-		default:
-			o[k] = v
-		}
-	}
-	return o
+    o := make(map[string]interface{})
+    for k, v := range m {
+            switch child := v.(type) {
+            case map[string]interface{}:
+                    nm := Flatten(child)
+                    for nk, nv := range nm {
+                            o[k+"."+nk] = nv
+                    }
+            default:
+                    o[k] = v
+            }
+    }
+    return o
 }
 
 var fm map[string]interface{}
