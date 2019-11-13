@@ -1,18 +1,20 @@
-package main
+package visitor
 
 import (
+	"errors"
 	"fmt"
-	"strings"
-	"strconv"
-
-	"./parser"
 	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/golang/glog"
+	"github.com/kubesphere/event-rule-engine/visitor/parser"
+
+	"strconv"
+	"strings"
 )
 
 type Visitor struct {
 	parser.BaseEventRuleVisitor
 	valueStack []bool
-	m map[string]interface{}
+	m          map[string]interface{}
 }
 
 func NewVisitor(m map[string]interface{}) *Visitor {
@@ -21,20 +23,20 @@ func NewVisitor(m map[string]interface{}) *Visitor {
 	}
 }
 
-func (l *Visitor) pushValue(i bool) {
-	l.valueStack = append(l.valueStack, i)
+func (v *Visitor) pushValue(i bool) {
+	v.valueStack = append(v.valueStack, i)
 }
 
-func (l *Visitor) popValue() bool {
-	if len(l.valueStack) < 1 {
+func (v *Visitor) popValue() bool {
+	if len(v.valueStack) < 1 {
 		panic("valueStack is empty unable to pop")
 	}
 
 	// Get the last value from the stack.
-	result := l.valueStack[len(l.valueStack)-1]
+	result := v.valueStack[len(v.valueStack)-1]
 
 	// Remove the last element from the stack.
-	l.valueStack = l.valueStack[:len(l.valueStack)-1]
+	v.valueStack = v.valueStack[:len(v.valueStack)-1]
 
 	return result
 }
@@ -49,14 +51,14 @@ func (v *Visitor) VisitStart(ctx *parser.StartContext) interface{} {
 }
 
 func (v *Visitor) VisitAndOr(ctx *parser.AndOrContext) interface{} {
-	fmt.Printf("VisitAndOr\n")
+	glog.Infof("VisitAndOr")
 
 	//push expression result to stack
 	v.visitRule(ctx.Expression(0))
 	v.visitRule(ctx.Expression(1))
 
 	//push result to stack
-	var t antlr.Token = ctx.GetOp()
+	t := ctx.GetOp()
 	right := v.popValue()
 	left := v.popValue()
 	switch t.GetTokenType() {
@@ -72,7 +74,7 @@ func (v *Visitor) VisitAndOr(ctx *parser.AndOrContext) interface{} {
 }
 
 func (v *Visitor) VisitNot(ctx *parser.NotContext) interface{} {
-	fmt.Printf("VisitNot\n")
+	glog.Infof("VisitNot")
 
 	v.visitRule(ctx.Expression())
 
@@ -83,14 +85,18 @@ func (v *Visitor) VisitNot(ctx *parser.NotContext) interface{} {
 }
 
 func (v *Visitor) VisitStringEqualContains(ctx *parser.StringEqualContainsContext) interface{} {
+	t := ctx.GetOp()
 	varName := ctx.VAR().GetText()
 	strValue := ctx.STRING().GetText()
-	var t antlr.Token = ctx.GetOp()
-
 	strValue = strings.TrimLeft(strValue, `"`)
 	strValue = strings.TrimRight(strValue, `"`)
 
-	fmt.Printf("VisitStringEqualContains %s %d %s\n", varName, t.GetTokenType(), strValue)
+	glog.Infof("VisitStringEqualContains %s %d %s", varName, t.GetTokenType(), strValue)
+
+	if v.m[varName] == nil {
+		v.pushValue(false)
+		return nil
+	}
 
 	switch t.GetTokenType() {
 	case parser.EventRuleParserEQU:
@@ -106,20 +112,25 @@ func (v *Visitor) VisitStringIn(ctx *parser.StringInContext) interface{} {
 	varName := ctx.VAR().GetText()
 	length := len(ctx.AllSTRING())
 
-	strValues := []string{}
-	for i := 0; i<length; i++ {
+	var strValues []string
+	for i := 0; i < length; i++ {
 		strValue := ctx.STRING(i).GetText()
 		strValue = strings.TrimLeft(strValue, `"`)
 		strValue = strings.TrimRight(strValue, `"`)
 		strValues = append(strValues, strValue)
 	}
 
-	fmt.Printf("VisitStringIn %s in %v\n", varName, strValues)
+	glog.Infof("VisitStringIn %s in %v", varName, strValues)
 
-	varValue := v.m[varName].(string)
+	if v.m[varName] == nil {
+		v.pushValue(false)
+		return nil
+	}
+
+	varValue := fmt.Sprint(v.m[varName])
 
 	result := false
-	for _, strValue := range(strValues) {
+	for _, strValue := range strValues {
 		if varValue == strValue {
 			result = true
 			break
@@ -135,13 +146,22 @@ func (v *Visitor) VisitCompareNumber(ctx *parser.CompareNumberContext) interface
 	varName := ctx.VAR().GetText()
 	numValue, err := strconv.ParseFloat(ctx.NUMBER().GetText(), 64)
 	if err != nil {
-		panic(err.Error())
+		panic(fmt.Sprintf("number err, key: %s, value: %s, err: %s", varName, ctx.NUMBER().GetText(), err.Error()))
 	}
-	var t antlr.Token = ctx.GetOp()
 
-	varValue := v.m[varName].(float64)
+	if v.m[varName] == nil {
+		v.pushValue(false)
+		return nil
+	}
 
-	fmt.Printf("VisitCompareNumber %s %d %v\n", varName, t.GetTokenType(), numValue)
+	varValue, err := strconv.ParseFloat(fmt.Sprint(v.m[varName]), 64)
+	if err != nil {
+		panic(fmt.Sprintf("number err, key: %s, value: %s, err: %s", varName, ctx.NUMBER().GetText(), err.Error()))
+	}
+
+	t := ctx.GetOp()
+
+	glog.Info("VisitCompareNumber %s %d %v", varName, t.GetTokenType(), numValue)
 
 	switch t.GetTokenType() {
 	case parser.EventRuleParserEQU:
@@ -161,11 +181,47 @@ func (v *Visitor) VisitCompareNumber(ctx *parser.CompareNumberContext) interface
 	return nil
 }
 
+func (v *Visitor) VisitNumberIn(ctx *parser.NumberInContext) interface{} {
+
+	varName := ctx.VAR().GetText()
+	length := len(ctx.AllNUMBER())
+
+	var strValues []string
+	for i := 0; i < length; i++ {
+		strValues = append(strValues, ctx.NUMBER(i).GetText())
+	}
+
+	glog.Infof("VisitStringIn %s in %v", varName, strValues)
+
+	if v.m[varName] == nil {
+		v.pushValue(false)
+		return nil
+	}
+
+	varValue := fmt.Sprint(v.m[varName])
+
+	result := false
+	for _, strValue := range strValues {
+		if varValue == strValue {
+			result = true
+			break
+		}
+	}
+
+	v.pushValue(result)
+
+	return nil
+}
+
 func (v *Visitor) VisitVariable(ctx *parser.VariableContext) interface{} {
 	varName := ctx.VAR().GetText()
-	fmt.Printf("VisitVariable %v\n", varName)
+	glog.Infof("VisitVariable %v", varName)
 
-	v.pushValue(v.m[varName].(bool))
+	if v.m[varName] == nil {
+		v.pushValue(false)
+	} else {
+		v.pushValue(v.m[varName].(bool))
+	}
 
 	return nil
 }
@@ -175,18 +231,47 @@ func (v *Visitor) VisitParenthesis(ctx *parser.ParenthesisContext) interface{} {
 	return nil
 }
 
-func EventRuleEvaluate(m map[string]interface{}, expression string) bool {
-	is := antlr.NewInputStream(expression)
+func CheckRule(expression string) bool {
 
-	// Create the Lexer
-	lexer := parser.NewEventRuleLexer(is)
-	tokens := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+	m := make(map[string]interface{})
+	err, _ := EventRuleEvaluate(m, expression)
+	if err != nil {
+		return false
+	}
 
-	// Create the Parser
-	p := parser.NewEventRuleParser(tokens)
+	return true
+}
 
-	v := NewVisitor(m)
-	//Start is rule name of EventRule.g4
-	p.Start().Accept(v)
-	return v.popValue()
+func EventRuleEvaluate(m map[string]interface{}, expression string) (error, bool) {
+
+	var err error
+
+	res := func() bool {
+		defer func() {
+			if i := recover(); i != nil {
+				err = errors.New(i.(string))
+			}
+		}()
+
+		is := antlr.NewInputStream(expression)
+
+		// Create the Lexer
+		lexer := parser.NewEventRuleLexer(is)
+		tokens := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+
+		// Create the Parser
+		p := parser.NewEventRuleParser(tokens)
+
+		v := NewVisitor(m)
+		//Start is rule name of EventRule.g4
+		p.Start().Accept(v)
+
+		return v.popValue()
+	}()
+
+	if err != nil {
+		return err, false
+	}
+
+	return nil, res
 }
