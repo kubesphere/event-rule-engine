@@ -1,4 +1,4 @@
-// Generated from EventRule.g4 by ANTLR 4.7.
+// Code generated from EventRule.g4 by ANTLR 4.7.1. DO NOT EDIT.
 
 package parser // EventRule
 
@@ -25,6 +25,10 @@ func (v *BaseEventRuleVisitor) VisitVariable(ctx *VariableContext) interface{} {
 }
 
 func (v *BaseEventRuleVisitor) VisitCompareNumber(ctx *CompareNumberContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseEventRuleVisitor) VisitNumberIn(ctx *NumberInContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

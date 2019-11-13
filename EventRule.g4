@@ -34,5 +34,6 @@ expression
    | VAR op=(EQU|CONTAINS) STRING           # StringEqualContains
    | VAR IN '(' STRING (COMMA STRING)* ')'  # StringIn
    | VAR op=(EQU|NEQ|GT|LT|GTE|LTE) NUMBER  # CompareNumber
+   | VAR IN '(' NUMBER (COMMA NUMBER)* ')'  # NumberIn
    | VAR                                    # Variable
    ;

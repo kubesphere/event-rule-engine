@@ -1,4 +1,4 @@
-// Generated from EventRule.g4 by ANTLR 4.7.
+// Code generated from EventRule.g4 by ANTLR 4.7.1. DO NOT EDIT.
 
 package parser
 

@@ -1,4 +1,4 @@
-// Generated from EventRule.g4 by ANTLR 4.7.
+// Code generated from EventRule.g4 by ANTLR 4.7.1. DO NOT EDIT.
 
 package parser // EventRule
 
@@ -22,6 +22,9 @@ type EventRuleVisitor interface {
 
 	// Visit a parse tree produced by EventRuleParser#CompareNumber.
 	VisitCompareNumber(ctx *CompareNumberContext) interface{}
+
+	// Visit a parse tree produced by EventRuleParser#NumberIn.
+	VisitNumberIn(ctx *NumberInContext) interface{}
 
 	// Visit a parse tree produced by EventRuleParser#StringEqualContains.
 	VisitStringEqualContains(ctx *StringEqualContainsContext) interface{}

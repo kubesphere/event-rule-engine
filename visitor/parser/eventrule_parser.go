@@ -1,4 +1,4 @@
-// Generated from EventRule.g4 by ANTLR 4.7.
+// Code generated from EventRule.g4 by ANTLR 4.7.1. DO NOT EDIT.
 
 package parser // EventRule
 
@@ -16,26 +16,31 @@ var _ = reflect.Copy
 var _ = strconv.Itoa
 
 var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 20, 46, 4,
+	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 20, 58, 4,
 	2, 9, 2, 4, 3, 9, 3, 3, 2, 3, 2, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 3, 26,
-	10, 3, 12, 3, 14, 3, 29, 11, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 3, 36,
-	10, 3, 3, 3, 3, 3, 3, 3, 7, 3, 41, 10, 3, 12, 3, 14, 3, 44, 11, 3, 3, 3,
-	2, 3, 4, 4, 2, 4, 2, 5, 4, 2, 8, 8, 14, 14, 3, 2, 8, 13, 3, 2, 5, 6, 2,
-	50, 2, 6, 3, 2, 2, 2, 4, 35, 3, 2, 2, 2, 6, 7, 5, 4, 3, 2, 7, 8, 7, 2,
-	2, 3, 8, 3, 3, 2, 2, 2, 9, 10, 8, 3, 1, 2, 10, 11, 7, 7, 2, 2, 11, 36,
-	5, 4, 3, 8, 12, 13, 7, 3, 2, 2, 13, 14, 5, 4, 3, 2, 14, 15, 7, 4, 2, 2,
-	15, 36, 3, 2, 2, 2, 16, 17, 7, 18, 2, 2, 17, 18, 9, 2, 2, 2, 18, 36, 7,
-	19, 2, 2, 19, 20, 7, 18, 2, 2, 20, 21, 7, 15, 2, 2, 21, 22, 7, 3, 2, 2,
-	22, 27, 7, 19, 2, 2, 23, 24, 7, 16, 2, 2, 24, 26, 7, 19, 2, 2, 25, 23,
-	3, 2, 2, 2, 26, 29, 3, 2, 2, 2, 27, 25, 3, 2, 2, 2, 27, 28, 3, 2, 2, 2,
-	28, 30, 3, 2, 2, 2, 29, 27, 3, 2, 2, 2, 30, 36, 7, 4, 2, 2, 31, 32, 7,
-	18, 2, 2, 32, 33, 9, 3, 2, 2, 33, 36, 7, 17, 2, 2, 34, 36, 7, 18, 2, 2,
-	35, 9, 3, 2, 2, 2, 35, 12, 3, 2, 2, 2, 35, 16, 3, 2, 2, 2, 35, 19, 3, 2,
-	2, 2, 35, 31, 3, 2, 2, 2, 35, 34, 3, 2, 2, 2, 36, 42, 3, 2, 2, 2, 37, 38,
-	12, 9, 2, 2, 38, 39, 9, 4, 2, 2, 39, 41, 5, 4, 3, 10, 40, 37, 3, 2, 2,
-	2, 41, 44, 3, 2, 2, 2, 42, 40, 3, 2, 2, 2, 42, 43, 3, 2, 2, 2, 43, 5, 3,
-	2, 2, 2, 44, 42, 3, 2, 2, 2, 5, 27, 35, 42,
+	10, 3, 12, 3, 14, 3, 29, 11, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 7, 3, 41, 10, 3, 12, 3, 14, 3, 44, 11, 3, 3, 3, 3,
+	3, 5, 3, 48, 10, 3, 3, 3, 3, 3, 3, 3, 7, 3, 53, 10, 3, 12, 3, 14, 3, 56,
+	11, 3, 3, 3, 2, 3, 4, 4, 2, 4, 2, 5, 4, 2, 8, 8, 14, 14, 3, 2, 8, 13, 3,
+	2, 5, 6, 2, 64, 2, 6, 3, 2, 2, 2, 4, 47, 3, 2, 2, 2, 6, 7, 5, 4, 3, 2,
+	7, 8, 7, 2, 2, 3, 8, 3, 3, 2, 2, 2, 9, 10, 8, 3, 1, 2, 10, 11, 7, 7, 2,
+	2, 11, 48, 5, 4, 3, 9, 12, 13, 7, 3, 2, 2, 13, 14, 5, 4, 3, 2, 14, 15,
+	7, 4, 2, 2, 15, 48, 3, 2, 2, 2, 16, 17, 7, 18, 2, 2, 17, 18, 9, 2, 2, 2,
+	18, 48, 7, 19, 2, 2, 19, 20, 7, 18, 2, 2, 20, 21, 7, 15, 2, 2, 21, 22,
+	7, 3, 2, 2, 22, 27, 7, 19, 2, 2, 23, 24, 7, 16, 2, 2, 24, 26, 7, 19, 2,
+	2, 25, 23, 3, 2, 2, 2, 26, 29, 3, 2, 2, 2, 27, 25, 3, 2, 2, 2, 27, 28,
+	3, 2, 2, 2, 28, 30, 3, 2, 2, 2, 29, 27, 3, 2, 2, 2, 30, 48, 7, 4, 2, 2,
+	31, 32, 7, 18, 2, 2, 32, 33, 9, 3, 2, 2, 33, 48, 7, 17, 2, 2, 34, 35, 7,
+	18, 2, 2, 35, 36, 7, 15, 2, 2, 36, 37, 7, 3, 2, 2, 37, 42, 7, 17, 2, 2,
+	38, 39, 7, 16, 2, 2, 39, 41, 7, 17, 2, 2, 40, 38, 3, 2, 2, 2, 41, 44, 3,
+	2, 2, 2, 42, 40, 3, 2, 2, 2, 42, 43, 3, 2, 2, 2, 43, 45, 3, 2, 2, 2, 44,
+	42, 3, 2, 2, 2, 45, 48, 7, 4, 2, 2, 46, 48, 7, 18, 2, 2, 47, 9, 3, 2, 2,
+	2, 47, 12, 3, 2, 2, 2, 47, 16, 3, 2, 2, 2, 47, 19, 3, 2, 2, 2, 47, 31,
+	3, 2, 2, 2, 47, 34, 3, 2, 2, 2, 47, 46, 3, 2, 2, 2, 48, 54, 3, 2, 2, 2,
+	49, 50, 12, 10, 2, 2, 50, 51, 9, 4, 2, 2, 51, 53, 5, 4, 3, 11, 52, 49,
+	3, 2, 2, 2, 53, 56, 3, 2, 2, 2, 54, 52, 3, 2, 2, 2, 54, 55, 3, 2, 2, 2,
+	55, 5, 3, 2, 2, 2, 56, 54, 3, 2, 2, 2, 6, 27, 42, 47, 54,
 }
 var deserializer = antlr.NewATNDeserializer(nil)
 var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
@@ -437,6 +442,58 @@ func (s *CompareNumberContext) Accept(visitor antlr.ParseTreeVisitor) interface{
 	}
 }
 
+type NumberInContext struct {
+	*ExpressionContext
+}
+
+func NewNumberInContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *NumberInContext {
+	var p = new(NumberInContext)
+
+	p.ExpressionContext = NewEmptyExpressionContext()
+	p.parser = parser
+	p.CopyFrom(ctx.(*ExpressionContext))
+
+	return p
+}
+
+func (s *NumberInContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *NumberInContext) VAR() antlr.TerminalNode {
+	return s.GetToken(EventRuleParserVAR, 0)
+}
+
+func (s *NumberInContext) IN() antlr.TerminalNode {
+	return s.GetToken(EventRuleParserIN, 0)
+}
+
+func (s *NumberInContext) AllNUMBER() []antlr.TerminalNode {
+	return s.GetTokens(EventRuleParserNUMBER)
+}
+
+func (s *NumberInContext) NUMBER(i int) antlr.TerminalNode {
+	return s.GetToken(EventRuleParserNUMBER, i)
+}
+
+func (s *NumberInContext) AllCOMMA() []antlr.TerminalNode {
+	return s.GetTokens(EventRuleParserCOMMA)
+}
+
+func (s *NumberInContext) COMMA(i int) antlr.TerminalNode {
+	return s.GetToken(EventRuleParserCOMMA, i)
+}
+
+func (s *NumberInContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case EventRuleVisitor:
+		return t.VisitNumberIn(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 type StringEqualContainsContext struct {
 	*ExpressionContext
 	op antlr.Token
@@ -635,9 +692,9 @@ func (p *EventRuleParser) expression(_p int) (localctx IExpressionContext) {
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(33)
+	p.SetState(45)
 	p.GetErrorHandler().Sync(p)
-	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 1, p.GetParserRuleContext()) {
+	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 2, p.GetParserRuleContext()) {
 	case 1:
 		localctx = NewNotContext(p, localctx)
 		p.SetParserRuleContext(localctx)
@@ -649,7 +706,7 @@ func (p *EventRuleParser) expression(_p int) (localctx IExpressionContext) {
 		}
 		{
 			p.SetState(9)
-			p.expression(6)
+			p.expression(7)
 		}
 
 	case 2:
@@ -677,21 +734,23 @@ func (p *EventRuleParser) expression(_p int) (localctx IExpressionContext) {
 			p.SetState(14)
 			p.Match(EventRuleParserVAR)
 		}
-		p.SetState(15)
+		{
+			p.SetState(15)
 
-		var _lt = p.GetTokenStream().LT(1)
+			var _lt = p.GetTokenStream().LT(1)
 
-		localctx.(*StringEqualContainsContext).op = _lt
+			localctx.(*StringEqualContainsContext).op = _lt
 
-		_la = p.GetTokenStream().LA(1)
+			_la = p.GetTokenStream().LA(1)
 
-		if !(_la == EventRuleParserEQU || _la == EventRuleParserCONTAINS) {
-			var _ri = p.GetErrorHandler().RecoverInline(p)
+			if !(_la == EventRuleParserEQU || _la == EventRuleParserCONTAINS) {
+				var _ri = p.GetErrorHandler().RecoverInline(p)
 
-			localctx.(*StringEqualContainsContext).op = _ri
-		} else {
-			p.GetErrorHandler().ReportMatch(p)
-			p.Consume()
+				localctx.(*StringEqualContainsContext).op = _ri
+			} else {
+				p.GetErrorHandler().ReportMatch(p)
+				p.Consume()
+			}
 		}
 		{
 			p.SetState(16)
@@ -749,21 +808,23 @@ func (p *EventRuleParser) expression(_p int) (localctx IExpressionContext) {
 			p.SetState(29)
 			p.Match(EventRuleParserVAR)
 		}
-		p.SetState(30)
+		{
+			p.SetState(30)
 
-		var _lt = p.GetTokenStream().LT(1)
+			var _lt = p.GetTokenStream().LT(1)
 
-		localctx.(*CompareNumberContext).op = _lt
+			localctx.(*CompareNumberContext).op = _lt
 
-		_la = p.GetTokenStream().LA(1)
+			_la = p.GetTokenStream().LA(1)
 
-		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<EventRuleParserEQU)|(1<<EventRuleParserNEQ)|(1<<EventRuleParserGT)|(1<<EventRuleParserLT)|(1<<EventRuleParserGTE)|(1<<EventRuleParserLTE))) != 0) {
-			var _ri = p.GetErrorHandler().RecoverInline(p)
+			if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<EventRuleParserEQU)|(1<<EventRuleParserNEQ)|(1<<EventRuleParserGT)|(1<<EventRuleParserLT)|(1<<EventRuleParserGTE)|(1<<EventRuleParserLTE))) != 0) {
+				var _ri = p.GetErrorHandler().RecoverInline(p)
 
-			localctx.(*CompareNumberContext).op = _ri
-		} else {
-			p.GetErrorHandler().ReportMatch(p)
-			p.Consume()
+				localctx.(*CompareNumberContext).op = _ri
+			} else {
+				p.GetErrorHandler().ReportMatch(p)
+				p.Consume()
+			}
 		}
 		{
 			p.SetState(31)
@@ -771,19 +832,62 @@ func (p *EventRuleParser) expression(_p int) (localctx IExpressionContext) {
 		}
 
 	case 6:
-		localctx = NewVariableContext(p, localctx)
+		localctx = NewNumberInContext(p, localctx)
 		p.SetParserRuleContext(localctx)
 		_prevctx = localctx
 		{
 			p.SetState(32)
 			p.Match(EventRuleParserVAR)
 		}
+		{
+			p.SetState(33)
+			p.Match(EventRuleParserIN)
+		}
+		{
+			p.SetState(34)
+			p.Match(EventRuleParserT__0)
+		}
+		{
+			p.SetState(35)
+			p.Match(EventRuleParserNUMBER)
+		}
+		p.SetState(40)
+		p.GetErrorHandler().Sync(p)
+		_la = p.GetTokenStream().LA(1)
+
+		for _la == EventRuleParserCOMMA {
+			{
+				p.SetState(36)
+				p.Match(EventRuleParserCOMMA)
+			}
+			{
+				p.SetState(37)
+				p.Match(EventRuleParserNUMBER)
+			}
+
+			p.SetState(42)
+			p.GetErrorHandler().Sync(p)
+			_la = p.GetTokenStream().LA(1)
+		}
+		{
+			p.SetState(43)
+			p.Match(EventRuleParserT__1)
+		}
+
+	case 7:
+		localctx = NewVariableContext(p, localctx)
+		p.SetParserRuleContext(localctx)
+		_prevctx = localctx
+		{
+			p.SetState(44)
+			p.Match(EventRuleParserVAR)
+		}
 
 	}
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(40)
+	p.SetState(52)
 	p.GetErrorHandler().Sync(p)
-	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 2, p.GetParserRuleContext())
+	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 3, p.GetParserRuleContext())
 
 	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 		if _alt == 1 {
@@ -793,36 +897,38 @@ func (p *EventRuleParser) expression(_p int) (localctx IExpressionContext) {
 			_prevctx = localctx
 			localctx = NewAndOrContext(p, NewExpressionContext(p, _parentctx, _parentState))
 			p.PushNewRecursionContext(localctx, _startState, EventRuleParserRULE_expression)
-			p.SetState(35)
+			p.SetState(47)
 
-			if !(p.Precpred(p.GetParserRuleContext(), 7)) {
-				panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 7)", ""))
-			}
-			p.SetState(36)
-
-			var _lt = p.GetTokenStream().LT(1)
-
-			localctx.(*AndOrContext).op = _lt
-
-			_la = p.GetTokenStream().LA(1)
-
-			if !(_la == EventRuleParserAND || _la == EventRuleParserOR) {
-				var _ri = p.GetErrorHandler().RecoverInline(p)
-
-				localctx.(*AndOrContext).op = _ri
-			} else {
-				p.GetErrorHandler().ReportMatch(p)
-				p.Consume()
+			if !(p.Precpred(p.GetParserRuleContext(), 8)) {
+				panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 8)", ""))
 			}
 			{
-				p.SetState(37)
-				p.expression(8)
+				p.SetState(48)
+
+				var _lt = p.GetTokenStream().LT(1)
+
+				localctx.(*AndOrContext).op = _lt
+
+				_la = p.GetTokenStream().LA(1)
+
+				if !(_la == EventRuleParserAND || _la == EventRuleParserOR) {
+					var _ri = p.GetErrorHandler().RecoverInline(p)
+
+					localctx.(*AndOrContext).op = _ri
+				} else {
+					p.GetErrorHandler().ReportMatch(p)
+					p.Consume()
+				}
+			}
+			{
+				p.SetState(49)
+				p.expression(9)
 			}
 
 		}
-		p.SetState(42)
+		p.SetState(54)
 		p.GetErrorHandler().Sync(p)
-		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 2, p.GetParserRuleContext())
+		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 3, p.GetParserRuleContext())
 	}
 
 	return localctx
@@ -845,7 +951,7 @@ func (p *EventRuleParser) Sempred(localctx antlr.RuleContext, ruleIndex, predInd
 func (p *EventRuleParser) Expression_Sempred(localctx antlr.RuleContext, predIndex int) bool {
 	switch predIndex {
 	case 0:
-		return p.Precpred(p.GetParserRuleContext(), 7)
+		return p.Precpred(p.GetParserRuleContext(), 8)
 
 	default:
 		panic("No predicate with index: " + fmt.Sprint(predIndex))
