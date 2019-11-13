@@ -3,12 +3,12 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/wanjunlei/event-rule-engine/visitor"
 	"fmt"
+	"github.com/wanjunlei/event-rule-engine/visitor"
 	"io/ioutil"
 	"os"
 
-	prompt "github.com/c-bata/go-prompt"
+	"github.com/c-bata/go-prompt"
 )
 
 // Flatten takes a map and returns a new one where nested maps are replaced

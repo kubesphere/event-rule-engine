@@ -127,7 +127,7 @@ func (v *Visitor) VisitStringIn(ctx *parser.StringInContext) interface{} {
 		return nil
 	}
 
-	varValue := v.m[varName].(string)
+	varValue := fmt.Sprint(v.m[varName])
 
 	result := false
 	for _, strValue := range strValues {
@@ -154,7 +154,7 @@ func (v *Visitor) VisitCompareNumber(ctx *parser.CompareNumberContext) interface
 		return nil
 	}
 
-	varValue, err := strconv.ParseFloat(v.m[varName].(string), 64)
+	varValue, err := strconv.ParseFloat(fmt.Sprint(v.m[varName]), 64)
 	if err != nil {
 		panic(fmt.Sprintf("number err, key: %s, value: %s, err: %s", varName, ctx.NUMBER().GetText(), err.Error()))
 	}
@@ -181,6 +181,38 @@ func (v *Visitor) VisitCompareNumber(ctx *parser.CompareNumberContext) interface
 	return nil
 }
 
+func (v *Visitor) VisitNumberIn(ctx *parser.NumberInContext) interface{} {
+
+	varName := ctx.VAR().GetText()
+	length := len(ctx.AllNUMBER())
+
+	var strValues []string
+	for i := 0; i < length; i++ {
+		strValues = append(strValues, ctx.NUMBER(i).GetText())
+	}
+
+	glog.Infof("VisitStringIn %s in %v", varName, strValues)
+
+	if v.m[varName] == nil {
+		v.pushValue(false)
+		return nil
+	}
+
+	varValue := fmt.Sprint(v.m[varName])
+
+	result := false
+	for _, strValue := range strValues {
+		if varValue == strValue {
+			result = true
+			break
+		}
+	}
+
+	v.pushValue(result)
+
+	return nil
+}
+
 func (v *Visitor) VisitVariable(ctx *parser.VariableContext) interface{} {
 	varName := ctx.VAR().GetText()
 	glog.Infof("VisitVariable %v", varName)
@@ -202,7 +234,7 @@ func (v *Visitor) VisitParenthesis(ctx *parser.ParenthesisContext) interface{} {
 func CheckRule(expression string) bool {
 
 	m := make(map[string]interface{})
-	err, _ := EventRuleEvaluate(m, "count=1 and reason=pod and count=1")
+	err, _ := EventRuleEvaluate(m, expression)
 	if err != nil {
 		return false
 	}
