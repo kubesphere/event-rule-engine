@@ -6,8 +6,6 @@ import (
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 	"github.com/golang/glog"
 	"github.com/wanjunlei/event-rule-engine/visitor/parser"
-
-	"strconv"
 	"strings"
 )
 
@@ -84,51 +82,101 @@ func (v *Visitor) VisitNot(ctx *parser.NotContext) interface{} {
 	return nil
 }
 
-func (v *Visitor) VisitStringEqualContains(ctx *parser.StringEqualContainsContext) interface{} {
-	t := ctx.GetOp()
+func (v *Visitor) VisitCompare(ctx *parser.CompareContext) interface{} {
+
 	varName := ctx.VAR().GetText()
-	strValue := ctx.STRING().GetText()
-	strValue = strings.TrimLeft(strValue, `"`)
-	strValue = strings.TrimRight(strValue, `"`)
-
-	glog.Infof("VisitStringEqualContains %s %d %s", varName, t.GetTokenType(), strValue)
-
 	if v.m[varName] == nil {
 		v.pushValue(false)
 		return nil
 	}
+	varValue := fmt.Sprint(v.m[varName])
 
-	switch t.GetTokenType() {
-	case parser.EventRuleParserEQU:
-		v.pushValue(v.m[varName].(string) == strValue)
-	case parser.EventRuleParserCONTAINS:
-		v.pushValue(strings.Contains(v.m[varName].(string), strValue))
+	node := ctx.STRING()
+	var strValue string
+	if node != nil {
+		strValue = node.GetText()
+		strValue = strings.TrimLeft(strValue, `"`)
+		strValue = strings.TrimRight(strValue, `"`)
+	} else {
+		node = ctx.NUMBER()
+		strValue = node.GetText()
 	}
+
+	result := false
+	switch ctx.GetOp().GetTokenType() {
+	case parser.EventRuleParserEQU:
+		result = varValue == strValue
+	case parser.EventRuleParserNEQ:
+		result = varValue != strValue
+	case parser.EventRuleParserGT:
+		result = varValue > strValue
+	case parser.EventRuleParserLT:
+		result = varValue < strValue
+	case parser.EventRuleParserGTE:
+		result = varValue >= strValue
+	case parser.EventRuleParserLTE:
+		result = varValue <= strValue
+	}
+
+	v.pushValue(result)
+	glog.Info("visit %s(%s) %s %s, %s", varName, varValue, ctx.GetOp().GetText(), strValue, result)
 
 	return nil
 }
 
-func (v *Visitor) VisitStringIn(ctx *parser.StringInContext) interface{} {
+func (v *Visitor) VisitContainsOrNot(ctx *parser.ContainsOrNotContext) interface{} {
+
 	varName := ctx.VAR().GetText()
-	length := len(ctx.AllSTRING())
+	if v.m[varName] == nil {
+		v.pushValue(false)
+		return nil
+	}
+	varValue := fmt.Sprint(v.m[varName])
+
+	node := ctx.STRING()
+	var strValue string
+	if node != nil {
+		strValue = node.GetText()
+		strValue = strings.TrimLeft(strValue, `"`)
+		strValue = strings.TrimRight(strValue, `"`)
+	}
+	if node == nil {
+		node = ctx.NUMBER()
+		strValue = node.GetText()
+	}
+
+	result := strings.Contains(varValue, strValue)
+	if ctx.GetOp().GetTokenType() == parser.EventRuleParserNOTCONTAINS {
+		result = !result
+	}
+	v.pushValue(result)
+	glog.Infof("visit %s(%s) %s %s, %s", varName, varValue, ctx.GetOp().GetText(), strValue, result)
+
+	return nil
+}
+
+func (v *Visitor) VisitInOrNot(ctx *parser.InOrNotContext) interface{} {
+
+	varName := ctx.VAR().GetText()
+	if v.m[varName] == nil {
+		v.pushValue(false)
+		return nil
+	}
+	varValue := fmt.Sprint(v.m[varName])
 
 	var strValues []string
-	for i := 0; i < length; i++ {
-		strValue := ctx.STRING(i).GetText()
+	for _, p := range ctx.AllNUMBER() {
+		strValue := p.GetText()
+		strValues = append(strValues, strValue)
+	}
+
+	for _, p := range ctx.AllSTRING() {
+		strValue := p.GetText()
 		strValue = strings.TrimLeft(strValue, `"`)
 		strValue = strings.TrimRight(strValue, `"`)
 		strValues = append(strValues, strValue)
 	}
 
-	glog.Infof("VisitStringIn %s in %v", varName, strValues)
-
-	if v.m[varName] == nil {
-		v.pushValue(false)
-		return nil
-	}
-
-	varValue := fmt.Sprint(v.m[varName])
-
 	result := false
 	for _, strValue := range strValues {
 		if varValue == strValue {
@@ -137,78 +185,12 @@ func (v *Visitor) VisitStringIn(ctx *parser.StringInContext) interface{} {
 		}
 	}
 
-	v.pushValue(result)
-
-	return nil
-}
-
-func (v *Visitor) VisitCompareNumber(ctx *parser.CompareNumberContext) interface{} {
-	varName := ctx.VAR().GetText()
-	numValue, err := strconv.ParseFloat(ctx.NUMBER().GetText(), 64)
-	if err != nil {
-		panic(fmt.Sprintf("number err, key: %s, value: %s, err: %s", varName, ctx.NUMBER().GetText(), err.Error()))
-	}
-
-	if v.m[varName] == nil {
-		v.pushValue(false)
-		return nil
-	}
-
-	varValue, err := strconv.ParseFloat(fmt.Sprint(v.m[varName]), 64)
-	if err != nil {
-		panic(fmt.Sprintf("number err, key: %s, value: %s, err: %s", varName, ctx.NUMBER().GetText(), err.Error()))
-	}
-
-	t := ctx.GetOp()
-
-	glog.Info("VisitCompareNumber %s %d %v", varName, t.GetTokenType(), numValue)
-
-	switch t.GetTokenType() {
-	case parser.EventRuleParserEQU:
-		v.pushValue(varValue == numValue)
-	case parser.EventRuleParserNEQ:
-		v.pushValue(varValue != numValue)
-	case parser.EventRuleParserGT:
-		v.pushValue(varValue > numValue)
-	case parser.EventRuleParserLT:
-		v.pushValue(varValue < numValue)
-	case parser.EventRuleParserGTE:
-		v.pushValue(varValue >= numValue)
-	case parser.EventRuleParserLTE:
-		v.pushValue(varValue <= numValue)
-	}
-
-	return nil
-}
-
-func (v *Visitor) VisitNumberIn(ctx *parser.NumberInContext) interface{} {
-
-	varName := ctx.VAR().GetText()
-	length := len(ctx.AllNUMBER())
-
-	var strValues []string
-	for i := 0; i < length; i++ {
-		strValues = append(strValues, ctx.NUMBER(i).GetText())
-	}
-
-	glog.Infof("VisitStringIn %s in %v", varName, strValues)
-
-	if v.m[varName] == nil {
-		v.pushValue(false)
-		return nil
-	}
-
-	varValue := fmt.Sprint(v.m[varName])
-
-	result := false
-	for _, strValue := range strValues {
-		if varValue == strValue {
-			result = true
-			break
-		}
+	if ctx.GetOp().GetTokenType() == parser.EventRuleParserNOTIN {
+		result = !result
 	}
 
 	v.pushValue(result)
+	glog.Infof("visit %s(%s) %s %s, %s", varName, varValue, ctx.GetOp().GetText(), strValues, result)
 
 	return nil
 }

@@ -3,8 +3,9 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
-	"github.com/kubesphere/event-rule-engine/visitor"
+	"github.com/wanjunlei/event-rule-engine/visitor"
 	"io/ioutil"
 	"os"
 
@@ -64,6 +65,7 @@ func readJson() {
 }
 
 func main() {
+	flag.Parse()
 	readJson()
 	p := prompt.New(
 		executor,

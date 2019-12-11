@@ -1,4 +1,3 @@
-// EventRule.g4
 grammar EventRule;
 
 // Tokens
@@ -12,7 +11,9 @@ LT: '<';
 GTE: '>=';
 LTE: '<=';
 CONTAINS: 'contains';
+NOTCONTAINS: 'not contains';
 IN: 'in';
+NOTIN: 'not in';
 COMMA: ',';
 NUMBER: [-]?[0-9]+('.'[0-9]+)?;
 VAR: [a-zA-Z0-9_.-]+;
@@ -28,12 +29,11 @@ start
    ;
 
 expression
-   : expression op=(AND|OR) expression      # AndOr
-   | NOT expression                         # Not
-   | '(' expression ')'                     # Parenthesis
-   | VAR op=(EQU|CONTAINS) STRING           # StringEqualContains
-   | VAR IN '(' STRING (COMMA STRING)* ')'  # StringIn
-   | VAR op=(EQU|NEQ|GT|LT|GTE|LTE) NUMBER  # CompareNumber
-   | VAR IN '(' NUMBER (COMMA NUMBER)* ')'  # NumberIn
-   | VAR                                    # Variable
+   : expression op=(AND|OR) expression                                  # AndOr
+   | NOT expression                                                     # Not
+   | '(' expression ')'                                                 # Parenthesis
+   | VAR op=(EQU|NEQ|GT|LT|GTE|LTE) (STRING|NUMBER)                     # Compare
+   | VAR op=(CONTAINS|NOTCONTAINS) (STRING|NUMBER)                      # ContainsOrNot
+   | VAR op=(IN|NOTIN) '(' (NUMBER|STRING) (COMMA (NUMBER|STRING))* ')' # InOrNot
+   | VAR                                                                # Variable
    ;

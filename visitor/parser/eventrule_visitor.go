@@ -11,6 +11,9 @@ type EventRuleVisitor interface {
 	// Visit a parse tree produced by EventRuleParser#start.
 	VisitStart(ctx *StartContext) interface{}
 
+	// Visit a parse tree produced by EventRuleParser#InOrNot.
+	VisitInOrNot(ctx *InOrNotContext) interface{}
+
 	// Visit a parse tree produced by EventRuleParser#Not.
 	VisitNot(ctx *NotContext) interface{}
 
@@ -20,18 +23,12 @@ type EventRuleVisitor interface {
 	// Visit a parse tree produced by EventRuleParser#Variable.
 	VisitVariable(ctx *VariableContext) interface{}
 
-	// Visit a parse tree produced by EventRuleParser#CompareNumber.
-	VisitCompareNumber(ctx *CompareNumberContext) interface{}
-
-	// Visit a parse tree produced by EventRuleParser#NumberIn.
-	VisitNumberIn(ctx *NumberInContext) interface{}
-
-	// Visit a parse tree produced by EventRuleParser#StringEqualContains.
-	VisitStringEqualContains(ctx *StringEqualContainsContext) interface{}
+	// Visit a parse tree produced by EventRuleParser#Compare.
+	VisitCompare(ctx *CompareContext) interface{}
 
 	// Visit a parse tree produced by EventRuleParser#AndOr.
 	VisitAndOr(ctx *AndOrContext) interface{}
 
-	// Visit a parse tree produced by EventRuleParser#StringIn.
-	VisitStringIn(ctx *StringInContext) interface{}
+	// Visit a parse tree produced by EventRuleParser#ContainsOrNot.
+	VisitContainsOrNot(ctx *ContainsOrNotContext) interface{}
 }

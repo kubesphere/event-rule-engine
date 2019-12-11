@@ -12,6 +12,10 @@ func (v *BaseEventRuleVisitor) VisitStart(ctx *StartContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseEventRuleVisitor) VisitInOrNot(ctx *InOrNotContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseEventRuleVisitor) VisitNot(ctx *NotContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -24,15 +28,7 @@ func (v *BaseEventRuleVisitor) VisitVariable(ctx *VariableContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseEventRuleVisitor) VisitCompareNumber(ctx *CompareNumberContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseEventRuleVisitor) VisitNumberIn(ctx *NumberInContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseEventRuleVisitor) VisitStringEqualContains(ctx *StringEqualContainsContext) interface{} {
+func (v *BaseEventRuleVisitor) VisitCompare(ctx *CompareContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -40,6 +36,6 @@ func (v *BaseEventRuleVisitor) VisitAndOr(ctx *AndOrContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseEventRuleVisitor) VisitStringIn(ctx *StringInContext) interface{} {
+func (v *BaseEventRuleVisitor) VisitContainsOrNot(ctx *ContainsOrNotContext) interface{} {
 	return v.VisitChildren(ctx)
 }
