@@ -6,7 +6,15 @@ import (
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 	"github.com/golang/glog"
 	"github.com/wanjunlei/event-rule-engine/visitor/parser"
+	"regexp"
 	"strings"
+)
+
+const (
+	LevelInfo = 6
+	//LevelWarning = 5
+	//LevelError = 4
+	//LevelFatal = 3
 )
 
 type Visitor struct {
@@ -49,7 +57,6 @@ func (v *Visitor) VisitStart(ctx *parser.StartContext) interface{} {
 }
 
 func (v *Visitor) VisitAndOr(ctx *parser.AndOrContext) interface{} {
-	glog.Infof("VisitAndOr")
 
 	//push expression result to stack
 	v.visitRule(ctx.Expression(0))
@@ -72,7 +79,6 @@ func (v *Visitor) VisitAndOr(ctx *parser.AndOrContext) interface{} {
 }
 
 func (v *Visitor) VisitNot(ctx *parser.NotContext) interface{} {
-	glog.Infof("VisitNot")
 
 	v.visitRule(ctx.Expression())
 
@@ -119,7 +125,7 @@ func (v *Visitor) VisitCompare(ctx *parser.CompareContext) interface{} {
 	}
 
 	v.pushValue(result)
-	glog.Info("visit %s(%s) %s %s, %s", varName, varValue, ctx.GetOp().GetText(), strValue, result)
+	glog.V(LevelInfo).Info("visit %s(%s) %s %s, %s", varName, varValue, ctx.GetOp().GetText(), strValue, result)
 
 	return nil
 }
@@ -150,7 +156,7 @@ func (v *Visitor) VisitContainsOrNot(ctx *parser.ContainsOrNotContext) interface
 		result = !result
 	}
 	v.pushValue(result)
-	glog.Infof("visit %s(%s) %s %s, %s", varName, varValue, ctx.GetOp().GetText(), strValue, result)
+	glog.V(LevelInfo).Infof("visit %s(%s) %s %s, %s", varName, varValue, ctx.GetOp().GetText(), strValue, result)
 
 	return nil
 }
@@ -190,14 +196,51 @@ func (v *Visitor) VisitInOrNot(ctx *parser.InOrNotContext) interface{} {
 	}
 
 	v.pushValue(result)
-	glog.Infof("visit %s(%s) %s %s, %s", varName, varValue, ctx.GetOp().GetText(), strValues, result)
+	glog.V(LevelInfo).Infof("visit %s(%s) %s %s, %s", varName, varValue, ctx.GetOp().GetText(), strValues, result)
+
+	return nil
+}
+
+func (v *Visitor) VisitRegexpOrNot(ctx *parser.RegexpOrNotContext) interface{} {
+
+	varName := ctx.VAR().GetText()
+	if v.m[varName] == nil {
+		v.pushValue(false)
+		return nil
+	}
+	varValue := fmt.Sprint(v.m[varName])
+
+	strValue := ctx.STRING().GetText()
+	strValue = strings.TrimLeft(strValue, `"`)
+	strValue = strings.TrimRight(strValue, `"`)
+
+	pattern := strValue
+	if ctx.GetOp().GetTokenType() == parser.EventRuleLexerLIKE ||  ctx.GetOp().GetTokenType() == parser.EventRuleLexerNOTLIKE{
+
+		pattern = strings.ReplaceAll(pattern, "?", ".")
+
+		rege, err := regexp.Compile("(\\*)+")
+		if err != nil {
+			panic(err)
+		}
+		pattern = rege.ReplaceAllString(pattern, "(.*)")
+	}
+
+	result, err := regexp.Match(pattern, []byte(varValue))
+	if err!= nil {
+		panic(err)
+	}
+	if ctx.GetOp().GetTokenType() == parser.EventRuleLexerNOTLIKE || ctx.GetOp().GetTokenType() == parser.EventRuleLexerNOTREGEXP {
+		result = !result
+	}
+	v.pushValue(result)
+	glog.V(LevelInfo).Infof("visit %s(%s) %s %s, %s", varName, varValue, ctx.GetOp().GetText(), strValue, result)
 
 	return nil
 }
 
 func (v *Visitor) VisitVariable(ctx *parser.VariableContext) interface{} {
 	varName := ctx.VAR().GetText()
-	glog.Infof("VisitVariable %v", varName)
 
 	if v.m[varName] == nil {
 		v.pushValue(false)

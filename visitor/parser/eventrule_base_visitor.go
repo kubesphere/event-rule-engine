@@ -28,6 +28,10 @@ func (v *BaseEventRuleVisitor) VisitVariable(ctx *VariableContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseEventRuleVisitor) VisitRegexpOrNot(ctx *RegexpOrNotContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseEventRuleVisitor) VisitCompare(ctx *CompareContext) interface{} {
 	return v.VisitChildren(ctx)
 }
