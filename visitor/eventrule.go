@@ -12,9 +12,6 @@ import (
 
 const (
 	LevelInfo = 6
-	//LevelWarning = 5
-	//LevelError = 4
-	//LevelFatal = 3
 )
 
 type Visitor struct {
@@ -125,7 +122,7 @@ func (v *Visitor) VisitCompare(ctx *parser.CompareContext) interface{} {
 	}
 
 	v.pushValue(result)
-	glog.V(LevelInfo).Info("visit %s(%s) %s %s, %s", varName, varValue, ctx.GetOp().GetText(), strValue, result)
+	glog.V(LevelInfo).Infof("visit %s(%s) %s %s, %s", varName, varValue, ctx.GetOp().GetText(), strValue, result)
 
 	return nil
 }
