@@ -253,15 +253,15 @@ func (v *Visitor) VisitParenthesis(ctx *parser.ParenthesisContext) interface{} {
 	return nil
 }
 
-func CheckRule(expression string) bool {
+func CheckRule(expression string) (bool, error) {
 
 	m := make(map[string]interface{})
 	err, _ := EventRuleEvaluate(m, expression)
 	if err != nil {
-		return false
+		return false, err
 	}
 
-	return true
+	return true, nil
 }
 
 func EventRuleEvaluate(m map[string]interface{}, expression string) (error, bool) {
