@@ -14,6 +14,42 @@ import (
 
 // Flatten takes a map and returns a new one where nested maps are replaced
 // by dot-delimited keys.
+//func Flatten(key string, v interface{}) map[string]interface{} {
+//	o := make(map[string]interface{})
+//
+//	switch v.(type) {
+//	case map[string]interface{}:
+//		for mk, mv := range v.(map[string]interface{}) {
+//			switch mv.(type) {
+//			case map[string]interface{}:
+//				nm := Flatten(mk, mv)
+//				for nk, nv := range nm {
+//					o[mk+"."+nk] = nv
+//				}
+//			case []interface{}:
+//				nm := Flatten(mk, mv)
+//				for nk, nv := range nm {
+//					o[nk] = nv
+//				}
+//			default:
+//				o[mk] = mv
+//			}
+//		}
+//	case []interface{}:
+//		for index,sv :=range v.([]interface{}) {
+//			sm := Flatten(key, sv)
+//			for nk, nv := range sm {
+//				//o[key + "[" + fmt.Sprint(index) + "]"+"."+nk] = nv
+//				o[key + "[" + fmt.Sprint(index) + "]"+"."+nk] = nv
+//			}
+//		}
+//	default:
+//		o[key] = v
+//
+//	}
+//
+//	return o
+//}
 func Flatten(m map[string]interface{}) map[string]interface{} {
 	o := make(map[string]interface{})
 	for k, v := range m {
@@ -33,6 +69,7 @@ func Flatten(m map[string]interface{}) map[string]interface{} {
 var fm map[string]interface{}
 
 func executor(in string) {
+	fmt.Println(visitor.CheckRule(in))
 	err, res := visitor.EventRuleEvaluate(fm, in)
 	if err != nil {
 		fmt.Println(err)
@@ -41,7 +78,7 @@ func executor(in string) {
 	fmt.Printf("Answer: %v\n", res)
 }
 
-func completer(in prompt.Document) []prompt.Suggest {
+func completer(_ prompt.Document) []prompt.Suggest {
 	var ret []prompt.Suggest
 	return ret
 }

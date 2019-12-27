@@ -3,7 +3,7 @@ grammar EventRule;
 // Tokens
 AND: 'and';
 OR: 'or';
-NOT: 'not';
+NOT: 'not' | '!';
 EQU: '=';
 NEQ: '!=';
 GT: '>';
@@ -14,10 +14,16 @@ CONTAINS: 'contains';
 NOTCONTAINS: 'not contains';
 IN: 'in';
 NOTIN: 'not in';
+LIKE: 'like';
+NOTLIKE: 'not like';
+REGEXP: 'regexp';
+NOTREGEXP: 'not regexp';
 COMMA: ',';
 NUMBER: [-]?[0-9]+('.'[0-9]+)?;
-VAR: [a-zA-Z0-9_.-]+;
+BOOLEAN: 'True'|'TRUE'|'true'|'False'|'FALSE'|'false';
 STRING: '"' (ESC|.)*? '"';
+//VAR: [a-zA-Z0-9_.-]+;
+VAR: [a-zA-Z_][a-zA-Z0-9_]*('['('*'|[0-9]+|(([0-9]+)?':'([0-9]+)?))']')?('.'[a-zA-Z_][a-zA-Z0-9_]*('['('*'|[0-9]+|(([0-9]+)?':'([0-9]+)?))']')?('.')?)*;
 WHITESPACE: [ \t\r\n] ->skip;
 
 fragment
@@ -33,7 +39,10 @@ expression
    | NOT expression                                                     # Not
    | '(' expression ')'                                                 # Parenthesis
    | VAR op=(EQU|NEQ|GT|LT|GTE|LTE) (STRING|NUMBER)                     # Compare
+   | VAR op=(EQU|NEQ) BOOLEAN                                           # BoolCompare
    | VAR op=(CONTAINS|NOTCONTAINS) (STRING|NUMBER)                      # ContainsOrNot
    | VAR op=(IN|NOTIN) '(' (NUMBER|STRING) (COMMA (NUMBER|STRING))* ')' # InOrNot
+   | VAR op=(REGEXP|NOTREGEXP|LIKE|NOTLIKE) STRING                      # RegexpOrNot
    | VAR                                                                # Variable
+   | NOT VAR                                                            # NotVariable
    ;

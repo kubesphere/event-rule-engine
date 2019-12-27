@@ -1,17 +1,24 @@
 package visitor
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 	"github.com/golang/glog"
 	"github.com/wanjunlei/event-rule-engine/visitor/parser"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
 const (
 	LevelInfo = 6
+)
+
+const (
+	ArrayOperatorAny = 1
+	ArrayOperatorAll = 2
 )
 
 type Visitor struct {
@@ -88,53 +95,141 @@ func (v *Visitor) VisitNot(ctx *parser.NotContext) interface{} {
 func (v *Visitor) VisitCompare(ctx *parser.CompareContext) interface{} {
 
 	varName := ctx.VAR().GetText()
-	if v.m[varName] == nil {
-		v.pushValue(false)
+	if !strings.Contains(varName, "[") {
+		if v.m[varName] == nil {
+			v.pushValue(false)
+			return nil
+		}
+
+		v.pushValue(compare(varName, v.m[varName], ctx))
 		return nil
 	}
-	varValue := fmt.Sprint(v.m[varName])
 
-	node := ctx.STRING()
-	var strValue string
-	if node != nil {
-		strValue = node.GetText()
-		strValue = strings.TrimLeft(strValue, `"`)
-		strValue = strings.TrimRight(strValue, `"`)
-	} else {
-		node = ctx.NUMBER()
-		strValue = node.GetText()
-	}
-
-	result := false
-	switch ctx.GetOp().GetTokenType() {
-	case parser.EventRuleParserEQU:
-		result = varValue == strValue
-	case parser.EventRuleParserNEQ:
-		result = varValue != strValue
-	case parser.EventRuleParserGT:
-		result = varValue > strValue
-	case parser.EventRuleParserLT:
-		result = varValue < strValue
-	case parser.EventRuleParserGTE:
-		result = varValue >= strValue
-	case parser.EventRuleParserLTE:
-		result = varValue <= strValue
-	}
-
-	v.pushValue(result)
-	glog.V(LevelInfo).Infof("visit %s(%s) %s %s, %s", varName, varValue, ctx.GetOp().GetText(), strValue, result)
+	v.pushValue(arrayOperator(v, varName, ctx.GetOp().GetTokenType(), func(value interface{}) bool {
+		return compare(varName, value, ctx)
+	}))
 
 	return nil
+}
+
+func compare(name string, value interface{}, ctx *parser.CompareContext) bool {
+
+	result := false
+	if ctx.STRING() != nil {
+		strValue := ctx.STRING().GetText()
+		strValue = strings.TrimLeft(strValue, `"`)
+		strValue = strings.TrimRight(strValue, `"`)
+
+		switch ctx.GetOp().GetTokenType() {
+		case parser.EventRuleParserEQU:
+			result = fmt.Sprint(value) == strValue
+		case parser.EventRuleParserNEQ:
+			result = fmt.Sprint(value) != strValue
+		case parser.EventRuleParserGT:
+			result = fmt.Sprint(value) > strValue
+		case parser.EventRuleParserLT:
+			result = fmt.Sprint(value) < strValue
+		case parser.EventRuleParserGTE:
+			result = fmt.Sprint(value) >= strValue
+		case parser.EventRuleParserLTE:
+			result = fmt.Sprint(value) <= strValue
+		}
+
+		glog.V(LevelInfo).Infof("visit %s(%s) %s %s, %s", name, value, ctx.GetOp().GetText(), strValue, result)
+	} else {
+		numValue, err := strconv.ParseFloat(ctx.NUMBER().GetText(), 64)
+		if err != nil {
+			panic(fmt.Errorf("%s is not number", ctx.NUMBER().GetText()))
+		}
+
+		num, err := strconv.ParseFloat(fmt.Sprint(value), 64)
+		if err != nil {
+			panic(fmt.Errorf("%s is not number", value))
+		}
+
+		switch ctx.GetOp().GetTokenType() {
+		case parser.EventRuleParserEQU:
+			result = num == numValue
+		case parser.EventRuleParserNEQ:
+			result = num != numValue
+		case parser.EventRuleParserGT:
+			result = num > numValue
+		case parser.EventRuleParserLT:
+			result = num < numValue
+		case parser.EventRuleParserGTE:
+			result = num >= numValue
+		case parser.EventRuleParserLTE:
+			result = num <= numValue
+		}
+
+		glog.V(LevelInfo).Infof("visit %s(%s) %s %s, %s", name, value, ctx.GetOp().GetText(), numValue, result)
+	}
+
+	return result
+}
+
+func (v *Visitor) VisitBoolCompare(ctx *parser.BoolCompareContext) interface{} {
+
+	varName := ctx.VAR().GetText()
+	if !strings.Contains(varName, "[") {
+		if v.m[varName] == nil {
+			v.pushValue(false)
+			return nil
+		}
+
+		v.pushValue(boolCompare(varName, fmt.Sprint(v.m[varName]), ctx))
+		return nil
+	}
+
+	v.pushValue(arrayOperator(v, varName, ctx.GetOp().GetTokenType(), func(value interface{}) bool {
+		return boolCompare(varName, fmt.Sprint(value), ctx)
+	}))
+
+	return nil
+}
+
+func boolCompare(name, value string, ctx *parser.BoolCompareContext) bool {
+
+	boolValue, err := strconv.ParseBool(ctx.BOOLEAN().GetText())
+	if err != nil {
+		panic(fmt.Errorf("%s is not bool", ctx.BOOLEAN().GetText()))
+	}
+
+	bv, err := strconv.ParseBool(value)
+	if err != nil {
+		panic(fmt.Errorf("%s is not bool", value))
+	}
+
+	result := boolValue == bv
+	if ctx.GetOp().GetTokenType() == parser.EventRuleLexerNEQ {
+		result = !result
+	}
+
+	glog.V(LevelInfo).Infof("visit %s(%s) %s %s, %s", name, value, ctx.GetOp().GetText(), boolValue, result)
+	return result
 }
 
 func (v *Visitor) VisitContainsOrNot(ctx *parser.ContainsOrNotContext) interface{} {
 
 	varName := ctx.VAR().GetText()
-	if v.m[varName] == nil {
-		v.pushValue(false)
+	if !strings.Contains(varName, "[") {
+		if v.m[varName] == nil {
+			v.pushValue(false)
+			return nil
+		}
+
+		v.pushValue(containsOrNot(varName, fmt.Sprint(v.m[varName]), ctx))
 		return nil
 	}
-	varValue := fmt.Sprint(v.m[varName])
+
+	v.pushValue(arrayOperator(v, varName, ctx.GetOp().GetTokenType(), func(value interface{}) bool {
+		return containsOrNot(varName, fmt.Sprint(value), ctx)
+	}))
+
+	return nil
+}
+
+func containsOrNot(name, value string, ctx *parser.ContainsOrNotContext) bool {
 
 	node := ctx.STRING()
 	var strValue string
@@ -148,25 +243,35 @@ func (v *Visitor) VisitContainsOrNot(ctx *parser.ContainsOrNotContext) interface
 		strValue = node.GetText()
 	}
 
-	result := strings.Contains(varValue, strValue)
+	result := strings.Contains(value, strValue)
 	if ctx.GetOp().GetTokenType() == parser.EventRuleParserNOTCONTAINS {
 		result = !result
 	}
-	v.pushValue(result)
-	glog.V(LevelInfo).Infof("visit %s(%s) %s %s, %s", varName, varValue, ctx.GetOp().GetText(), strValue, result)
 
-	return nil
+	glog.V(LevelInfo).Infof("visit %s(%s) %s %s, %s", name, value, ctx.GetOp().GetText(), strValue, result)
+	return result
 }
 
 func (v *Visitor) VisitInOrNot(ctx *parser.InOrNotContext) interface{} {
 
 	varName := ctx.VAR().GetText()
-	if v.m[varName] == nil {
-		v.pushValue(false)
+	if !strings.Contains(varName, "[") {
+		if v.m[varName] == nil {
+			v.pushValue(false)
+			return nil
+		}
+
+		v.pushValue(inOrNot(varName, fmt.Sprint(v.m[varName]), ctx))
 		return nil
 	}
-	varValue := fmt.Sprint(v.m[varName])
 
+	v.pushValue(arrayOperator(v, varName, ctx.GetOp().GetTokenType(), func(value interface{}) bool {
+		return inOrNot(varName, fmt.Sprint(value), ctx)
+	}))
+	return nil
+}
+
+func inOrNot(name, value string, ctx *parser.InOrNotContext) bool {
 	var strValues []string
 	for _, p := range ctx.AllNUMBER() {
 		strValue := p.GetText()
@@ -182,7 +287,7 @@ func (v *Visitor) VisitInOrNot(ctx *parser.InOrNotContext) interface{} {
 
 	result := false
 	for _, strValue := range strValues {
-		if varValue == strValue {
+		if value == strValue {
 			result = true
 			break
 		}
@@ -192,27 +297,36 @@ func (v *Visitor) VisitInOrNot(ctx *parser.InOrNotContext) interface{} {
 		result = !result
 	}
 
-	v.pushValue(result)
-	glog.V(LevelInfo).Infof("visit %s(%s) %s %s, %s", varName, varValue, ctx.GetOp().GetText(), strValues, result)
-
-	return nil
+	glog.V(LevelInfo).Infof("visit %s(%s) %s %s, %s", name, value, ctx.GetOp().GetText(), strValues, result)
+	return result
 }
 
 func (v *Visitor) VisitRegexpOrNot(ctx *parser.RegexpOrNotContext) interface{} {
 
 	varName := ctx.VAR().GetText()
-	if v.m[varName] == nil {
-		v.pushValue(false)
+	if !strings.Contains(varName, "[") {
+		if v.m[varName] == nil {
+			v.pushValue(false)
+			return nil
+		}
+
+		v.pushValue(regexpOrNot(varName, fmt.Sprint(v.m[varName]), ctx))
 		return nil
 	}
-	varValue := fmt.Sprint(v.m[varName])
 
+	v.pushValue(arrayOperator(v, varName, ctx.GetOp().GetTokenType(), func(value interface{}) bool {
+		return regexpOrNot(varName, fmt.Sprint(value), ctx)
+	}))
+	return nil
+}
+
+func regexpOrNot(name, value string, ctx *parser.RegexpOrNotContext) bool {
 	strValue := ctx.STRING().GetText()
 	strValue = strings.TrimLeft(strValue, `"`)
 	strValue = strings.TrimRight(strValue, `"`)
 
 	pattern := strValue
-	if ctx.GetOp().GetTokenType() == parser.EventRuleLexerLIKE ||  ctx.GetOp().GetTokenType() == parser.EventRuleLexerNOTLIKE{
+	if ctx.GetOp().GetTokenType() == parser.EventRuleLexerLIKE || ctx.GetOp().GetTokenType() == parser.EventRuleLexerNOTLIKE {
 
 		pattern = strings.ReplaceAll(pattern, "?", ".")
 
@@ -223,29 +337,55 @@ func (v *Visitor) VisitRegexpOrNot(ctx *parser.RegexpOrNotContext) interface{} {
 		pattern = rege.ReplaceAllString(pattern, "(.*)")
 	}
 
-	result, err := regexp.Match(pattern, []byte(varValue))
-	if err!= nil {
+	result, err := regexp.Match(pattern, []byte(value))
+	if err != nil {
 		panic(err)
 	}
 	if ctx.GetOp().GetTokenType() == parser.EventRuleLexerNOTLIKE || ctx.GetOp().GetTokenType() == parser.EventRuleLexerNOTREGEXP {
 		result = !result
 	}
-	v.pushValue(result)
-	glog.V(LevelInfo).Infof("visit %s(%s) %s %s, %s", varName, varValue, ctx.GetOp().GetText(), strValue, result)
+
+	glog.V(LevelInfo).Infof("visit %s(%s) %s %s, %s", name, value, ctx.GetOp().GetText(), strValue, result)
+	return result
+}
+
+func (v *Visitor) VisitVariable(ctx *parser.VariableContext) interface{} {
+	return visitVariable(ctx.VAR().GetText(), v, true)
+}
+
+func (v *Visitor) VisitNotVariable(ctx *parser.NotVariableContext) interface{} {
+	return visitVariable(ctx.VAR().GetText(), v, false)
+}
+
+func visitVariable(varName string, v *Visitor, flag bool) error {
+	if !strings.Contains(varName, "[") {
+		if v.m[varName] == nil {
+			v.pushValue(false)
+			return nil
+		}
+
+		v.pushValue(variable(varName, v, flag))
+		return nil
+	}
+
+	v.pushValue(arrayOperator(v, varName, -1, func(value interface{}) bool {
+		return variable(varName, v, flag)
+	}))
 
 	return nil
 }
 
-func (v *Visitor) VisitVariable(ctx *parser.VariableContext) interface{} {
-	varName := ctx.VAR().GetText()
+func variable(varName string, v *Visitor, flag bool) bool {
 
 	if v.m[varName] == nil {
-		v.pushValue(false)
+		return false
 	} else {
-		v.pushValue(v.m[varName].(bool))
+		bv, err := strconv.ParseBool(fmt.Sprint(v.m[varName]))
+		if err != nil {
+			panic(fmt.Errorf("%s is not bool", v.m[varName]))
+		}
+		return bv == flag
 	}
-
-	return nil
 }
 
 func (v *Visitor) VisitParenthesis(ctx *parser.ParenthesisContext) interface{} {
@@ -296,4 +436,197 @@ func EventRuleEvaluate(m map[string]interface{}, expression string) (error, bool
 	}
 
 	return nil, res
+}
+
+func arrayOperator(v *Visitor, varName string, tokenType int, match func(value interface{}) bool) bool {
+	if strings.HasSuffix(varName, "]") &&
+		tokenType != parser.EventRuleParserNOTCONTAINS &&
+		tokenType != parser.EventRuleParserCONTAINS {
+		panic("array only suport contains or not contains method")
+	}
+
+	ss := strings.Split(varName, ".")
+	buf := bytes.Buffer{}
+	for i := 0; i < len(ss); i++ {
+		s := ss[i]
+		if !strings.Contains(s, "[") {
+			buf.WriteString(s)
+			buf.WriteString(".")
+			continue
+		}
+
+		buf.WriteString(s[0:strings.Index(s, "[")])
+		ss = ss[i:]
+		break
+	}
+
+	if v.m[buf.String()] == nil {
+		return false
+	}
+
+	varValue := v.m[buf.String()]
+	if !isArray(varValue) {
+		panic(fmt.Errorf("%s is not array", buf.String()))
+	}
+
+	value := varValue.([]interface{})
+	if len(value) == 0 {
+		return false
+	}
+
+	cvalue, op, err := getChildValue(ss[0], value)
+	if err != nil {
+		panic(err)
+	}
+
+	if cvalue == nil || len(cvalue) == 0 {
+		return false
+	}
+
+	return arrayMatch(op, cvalue, ss[1:], match)
+}
+
+func arrayMatch(op int, value []interface{}, array []string, match func(value interface{}) bool) bool {
+
+	b := false
+	result := false
+	for _, v := range value {
+		if len(array) == 0 {
+			b = match(v)
+		} else {
+			if !isMap(v) {
+				panic("the value not a map")
+			}
+
+			s := array[0]
+			key := s
+			if strings.Contains(s, "[") {
+				key = key[0:strings.Index(key, "[")]
+			}
+
+			subvalue, ok := v.(map[string]interface{})[key]
+			if !ok && op == ArrayOperatorAll {
+				return false
+			}
+
+			cop := 0
+			var cvalue []interface{}
+			if strings.Contains(s, "[") {
+				if !isArray(subvalue) {
+					panic("the value not a array")
+				}
+
+				var err error
+				cvalue, cop, err = getChildValue(s, subvalue.([]interface{}))
+				if err != nil {
+					panic(err)
+				}
+
+				if cvalue == nil || len(cvalue) == 0 {
+					return false
+				}
+			} else {
+				cvalue = append(cvalue, subvalue)
+				cop = ArrayOperatorAny
+			}
+
+			b = arrayMatch(cop, cvalue, array[1:], match)
+		}
+
+		switch op {
+		case ArrayOperatorAny:
+			if b {
+				return true
+			}
+		case ArrayOperatorAll:
+			if !b {
+				return false
+			}
+			result = true
+		}
+	}
+
+	return result
+}
+
+func getChildValue(param string, value []interface{}) ([]interface{}, int, error) {
+
+	s := param[strings.Index(param, "["):]
+	s = strings.TrimPrefix(s, "[")
+	s = strings.TrimSuffix(s, "]")
+
+	switch s {
+	case "*":
+		return value, ArrayOperatorAny, nil
+	default:
+		if strings.Contains(s, ":") {
+			ns := strings.Split(s, ":")
+			start := 0
+			if len(ns[0]) > 0 {
+				var err error
+				start, err = strconv.Atoi(ns[0])
+				if err != nil {
+					return nil, 0, err
+				}
+
+				if start < 0 {
+					start = 0
+				}
+				if start > len(value) {
+					start = len(value)
+				}
+			}
+			end := len(value)
+			if len(ns[1]) > 0 {
+				var err error
+				end, err = strconv.Atoi(ns[1])
+				if err != nil {
+					return nil, 0, err
+				}
+
+				if end < 0 {
+					return nil, 0, fmt.Errorf("array out of bound end %d", end)
+				}
+
+				if end > len(value) {
+					end = len(value)
+				}
+			}
+			if start > end {
+				return nil, 0, fmt.Errorf("wrong array range start %d, end %d", start, end)
+			}
+
+			return value[start:end], ArrayOperatorAll, nil
+		} else {
+			index, err := strconv.Atoi(s)
+			if err != nil {
+				return nil, 0, err
+			}
+
+			var cv []interface{}
+			if index >= 0 && index < len(value) {
+				cv = append(cv, value[index])
+			}
+
+			return cv, ArrayOperatorAll, nil
+		}
+	}
+}
+
+func isArray(v interface{}) bool {
+	switch v.(type) {
+	case []interface{}:
+		return true
+	default:
+		return false
+	}
+}
+
+func isMap(v interface{}) bool {
+	switch v.(type) {
+	case map[string]interface{}:
+		return true
+	default:
+		return false
+	}
 }

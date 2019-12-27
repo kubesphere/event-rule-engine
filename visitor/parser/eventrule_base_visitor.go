@@ -24,11 +24,19 @@ func (v *BaseEventRuleVisitor) VisitParenthesis(ctx *ParenthesisContext) interfa
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseEventRuleVisitor) VisitBoolCompare(ctx *BoolCompareContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseEventRuleVisitor) VisitVariable(ctx *VariableContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
 func (v *BaseEventRuleVisitor) VisitRegexpOrNot(ctx *RegexpOrNotContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseEventRuleVisitor) VisitNotVariable(ctx *NotVariableContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

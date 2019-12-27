@@ -20,11 +20,17 @@ type EventRuleVisitor interface {
 	// Visit a parse tree produced by EventRuleParser#Parenthesis.
 	VisitParenthesis(ctx *ParenthesisContext) interface{}
 
+	// Visit a parse tree produced by EventRuleParser#BoolCompare.
+	VisitBoolCompare(ctx *BoolCompareContext) interface{}
+
 	// Visit a parse tree produced by EventRuleParser#Variable.
 	VisitVariable(ctx *VariableContext) interface{}
 
 	// Visit a parse tree produced by EventRuleParser#RegexpOrNot.
 	VisitRegexpOrNot(ctx *RegexpOrNotContext) interface{}
+
+	// Visit a parse tree produced by EventRuleParser#NotVariable.
+	VisitNotVariable(ctx *NotVariableContext) interface{}
 
 	// Visit a parse tree produced by EventRuleParser#Compare.
 	VisitCompare(ctx *CompareContext) interface{}
