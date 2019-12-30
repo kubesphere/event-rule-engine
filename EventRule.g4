@@ -18,6 +18,8 @@ LIKE: 'like';
 NOTLIKE: 'not like';
 REGEXP: 'regexp';
 NOTREGEXP: 'not regexp';
+EXISTS: 'exists';
+NOTEXISTS: 'not exists';
 COMMA: ',';
 NUMBER: [-]?[0-9]+('.'[0-9]+)?;
 BOOLEAN: 'True'|'TRUE'|'true'|'False'|'FALSE'|'false';
@@ -43,6 +45,7 @@ expression
    | VAR op=(CONTAINS|NOTCONTAINS) (STRING|NUMBER)                      # ContainsOrNot
    | VAR op=(IN|NOTIN) '(' (NUMBER|STRING) (COMMA (NUMBER|STRING))* ')' # InOrNot
    | VAR op=(REGEXP|NOTREGEXP|LIKE|NOTLIKE) STRING                      # RegexpOrNot
+   | VAR op=(EXISTS|NOTEXISTS)                                          # ExistsOrNot
    | VAR                                                                # Variable
    | NOT VAR                                                            # NotVariable
    ;

@@ -393,6 +393,42 @@ func (v *Visitor) VisitParenthesis(ctx *parser.ParenthesisContext) interface{} {
 	return nil
 }
 
+func (v *Visitor) VisitExistsOrNot(ctx *parser.ExistsOrNotContext) interface{} {
+	varName := ctx.VAR().GetText()
+	if !strings.Contains(varName, "[") {
+		v.pushValue(existsOrNot(varName, v.m[varName], ctx.GetOp().GetTokenType(), v, true))
+		return nil
+	}
+
+	v.pushValue(arrayOperator(v, varName, ctx.GetOp().GetTokenType(), func(value interface{}) bool {
+		return existsOrNot(varName, value, ctx.GetOp().GetTokenType(), v, false)
+	}))
+	return nil
+}
+
+func existsOrNot(name string, value interface{}, tokenType int, v *Visitor, flag bool) bool {
+	result := true
+	if value == nil {
+		result = false
+	}
+
+	if !result && flag {
+		for k, v := range v.m {
+			if strings.HasPrefix(k, name+".") && v != nil {
+				result = true
+				break
+			}
+		}
+	}
+
+	if tokenType == parser.EventRuleParserNOTEXISTS {
+		result = !result
+	}
+
+	glog.V(LevelInfo).Infof("visit %s %s, %s", name, tokenType, result)
+	return result
+}
+
 func CheckRule(expression string) (bool, error) {
 
 	m := make(map[string]interface{})

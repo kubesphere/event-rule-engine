@@ -35,6 +35,9 @@ type EventRuleVisitor interface {
 	// Visit a parse tree produced by EventRuleParser#Compare.
 	VisitCompare(ctx *CompareContext) interface{}
 
+	// Visit a parse tree produced by EventRuleParser#ExistsOrNot.
+	VisitExistsOrNot(ctx *ExistsOrNotContext) interface{}
+
 	// Visit a parse tree produced by EventRuleParser#AndOr.
 	VisitAndOr(ctx *AndOrContext) interface{}
 

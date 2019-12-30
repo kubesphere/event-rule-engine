@@ -44,6 +44,10 @@ func (v *BaseEventRuleVisitor) VisitCompare(ctx *CompareContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseEventRuleVisitor) VisitExistsOrNot(ctx *ExistsOrNotContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseEventRuleVisitor) VisitAndOr(ctx *AndOrContext) interface{} {
 	return v.VisitChildren(ctx)
 }

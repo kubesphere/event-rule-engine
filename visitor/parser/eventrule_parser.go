@@ -16,31 +16,32 @@ var _ = reflect.Copy
 var _ = strconv.Itoa
 
 var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 27, 54, 4,
+	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 29, 56, 4,
 	2, 9, 2, 4, 3, 9, 3, 3, 2, 3, 2, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 3, 32, 10, 3, 12, 3, 14, 3, 35, 11, 3, 3,
-	3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 3, 44, 10, 3, 3, 3, 3, 3, 3,
-	3, 7, 3, 49, 10, 3, 12, 3, 14, 3, 52, 11, 3, 3, 3, 2, 3, 4, 4, 2, 4, 2,
-	9, 3, 2, 8, 13, 4, 2, 23, 23, 25, 25, 3, 2, 8, 9, 3, 2, 14, 15, 3, 2, 16,
-	17, 3, 2, 18, 21, 3, 2, 5, 6, 2, 61, 2, 6, 3, 2, 2, 2, 4, 43, 3, 2, 2,
-	2, 6, 7, 5, 4, 3, 2, 7, 8, 7, 2, 2, 3, 8, 3, 3, 2, 2, 2, 9, 10, 8, 3, 1,
-	2, 10, 11, 7, 7, 2, 2, 11, 44, 5, 4, 3, 11, 12, 13, 7, 3, 2, 2, 13, 14,
-	5, 4, 3, 2, 14, 15, 7, 4, 2, 2, 15, 44, 3, 2, 2, 2, 16, 17, 7, 26, 2, 2,
-	17, 18, 9, 2, 2, 2, 18, 44, 9, 3, 2, 2, 19, 20, 7, 26, 2, 2, 20, 21, 9,
-	4, 2, 2, 21, 44, 7, 24, 2, 2, 22, 23, 7, 26, 2, 2, 23, 24, 9, 5, 2, 2,
-	24, 44, 9, 3, 2, 2, 25, 26, 7, 26, 2, 2, 26, 27, 9, 6, 2, 2, 27, 28, 7,
-	3, 2, 2, 28, 33, 9, 3, 2, 2, 29, 30, 7, 22, 2, 2, 30, 32, 9, 3, 2, 2, 31,
-	29, 3, 2, 2, 2, 32, 35, 3, 2, 2, 2, 33, 31, 3, 2, 2, 2, 33, 34, 3, 2, 2,
-	2, 34, 36, 3, 2, 2, 2, 35, 33, 3, 2, 2, 2, 36, 44, 7, 4, 2, 2, 37, 38,
-	7, 26, 2, 2, 38, 39, 9, 7, 2, 2, 39, 44, 7, 25, 2, 2, 40, 44, 7, 26, 2,
-	2, 41, 42, 7, 7, 2, 2, 42, 44, 7, 26, 2, 2, 43, 9, 3, 2, 2, 2, 43, 12,
-	3, 2, 2, 2, 43, 16, 3, 2, 2, 2, 43, 19, 3, 2, 2, 2, 43, 22, 3, 2, 2, 2,
-	43, 25, 3, 2, 2, 2, 43, 37, 3, 2, 2, 2, 43, 40, 3, 2, 2, 2, 43, 41, 3,
-	2, 2, 2, 44, 50, 3, 2, 2, 2, 45, 46, 12, 12, 2, 2, 46, 47, 9, 8, 2, 2,
-	47, 49, 5, 4, 3, 13, 48, 45, 3, 2, 2, 2, 49, 52, 3, 2, 2, 2, 50, 48, 3,
-	2, 2, 2, 50, 51, 3, 2, 2, 2, 51, 5, 3, 2, 2, 2, 52, 50, 3, 2, 2, 2, 5,
-	33, 43, 50,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 3, 46, 10, 3, 3,
+	3, 3, 3, 3, 3, 7, 3, 51, 10, 3, 12, 3, 14, 3, 54, 11, 3, 3, 3, 2, 3, 4,
+	4, 2, 4, 2, 10, 3, 2, 8, 13, 4, 2, 25, 25, 27, 27, 3, 2, 8, 9, 3, 2, 14,
+	15, 3, 2, 16, 17, 3, 2, 18, 21, 3, 2, 22, 23, 3, 2, 5, 6, 2, 64, 2, 6,
+	3, 2, 2, 2, 4, 45, 3, 2, 2, 2, 6, 7, 5, 4, 3, 2, 7, 8, 7, 2, 2, 3, 8, 3,
+	3, 2, 2, 2, 9, 10, 8, 3, 1, 2, 10, 11, 7, 7, 2, 2, 11, 46, 5, 4, 3, 12,
+	12, 13, 7, 3, 2, 2, 13, 14, 5, 4, 3, 2, 14, 15, 7, 4, 2, 2, 15, 46, 3,
+	2, 2, 2, 16, 17, 7, 28, 2, 2, 17, 18, 9, 2, 2, 2, 18, 46, 9, 3, 2, 2, 19,
+	20, 7, 28, 2, 2, 20, 21, 9, 4, 2, 2, 21, 46, 7, 26, 2, 2, 22, 23, 7, 28,
+	2, 2, 23, 24, 9, 5, 2, 2, 24, 46, 9, 3, 2, 2, 25, 26, 7, 28, 2, 2, 26,
+	27, 9, 6, 2, 2, 27, 28, 7, 3, 2, 2, 28, 33, 9, 3, 2, 2, 29, 30, 7, 24,
+	2, 2, 30, 32, 9, 3, 2, 2, 31, 29, 3, 2, 2, 2, 32, 35, 3, 2, 2, 2, 33, 31,
+	3, 2, 2, 2, 33, 34, 3, 2, 2, 2, 34, 36, 3, 2, 2, 2, 35, 33, 3, 2, 2, 2,
+	36, 46, 7, 4, 2, 2, 37, 38, 7, 28, 2, 2, 38, 39, 9, 7, 2, 2, 39, 46, 7,
+	27, 2, 2, 40, 41, 7, 28, 2, 2, 41, 46, 9, 8, 2, 2, 42, 46, 7, 28, 2, 2,
+	43, 44, 7, 7, 2, 2, 44, 46, 7, 28, 2, 2, 45, 9, 3, 2, 2, 2, 45, 12, 3,
+	2, 2, 2, 45, 16, 3, 2, 2, 2, 45, 19, 3, 2, 2, 2, 45, 22, 3, 2, 2, 2, 45,
+	25, 3, 2, 2, 2, 45, 37, 3, 2, 2, 2, 45, 40, 3, 2, 2, 2, 45, 42, 3, 2, 2,
+	2, 45, 43, 3, 2, 2, 2, 46, 52, 3, 2, 2, 2, 47, 48, 12, 13, 2, 2, 48, 49,
+	9, 9, 2, 2, 49, 51, 5, 4, 3, 14, 50, 47, 3, 2, 2, 2, 51, 54, 3, 2, 2, 2,
+	52, 50, 3, 2, 2, 2, 52, 53, 3, 2, 2, 2, 53, 5, 3, 2, 2, 2, 54, 52, 3, 2,
+	2, 2, 5, 33, 45, 52,
 }
 var deserializer = antlr.NewATNDeserializer(nil)
 var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
@@ -48,12 +49,13 @@ var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
 var literalNames = []string{
 	"", "'('", "')'", "'and'", "'or'", "", "'='", "'!='", "'>'", "'<'", "'>='",
 	"'<='", "'contains'", "'not contains'", "'in'", "'not in'", "'like'", "'not like'",
-	"'regexp'", "'not regexp'", "','",
+	"'regexp'", "'not regexp'", "'exists'", "'not exists'", "','",
 }
 var symbolicNames = []string{
 	"", "", "", "AND", "OR", "NOT", "EQU", "NEQ", "GT", "LT", "GTE", "LTE",
 	"CONTAINS", "NOTCONTAINS", "IN", "NOTIN", "LIKE", "NOTLIKE", "REGEXP",
-	"NOTREGEXP", "COMMA", "NUMBER", "BOOLEAN", "STRING", "VAR", "WHITESPACE",
+	"NOTREGEXP", "EXISTS", "NOTEXISTS", "COMMA", "NUMBER", "BOOLEAN", "STRING",
+	"VAR", "WHITESPACE",
 }
 
 var ruleNames = []string{
@@ -107,12 +109,14 @@ const (
 	EventRuleParserNOTLIKE     = 17
 	EventRuleParserREGEXP      = 18
 	EventRuleParserNOTREGEXP   = 19
-	EventRuleParserCOMMA       = 20
-	EventRuleParserNUMBER      = 21
-	EventRuleParserBOOLEAN     = 22
-	EventRuleParserSTRING      = 23
-	EventRuleParserVAR         = 24
-	EventRuleParserWHITESPACE  = 25
+	EventRuleParserEXISTS      = 20
+	EventRuleParserNOTEXISTS   = 21
+	EventRuleParserCOMMA       = 22
+	EventRuleParserNUMBER      = 23
+	EventRuleParserBOOLEAN     = 24
+	EventRuleParserSTRING      = 25
+	EventRuleParserVAR         = 26
+	EventRuleParserWHITESPACE  = 27
 )
 
 // EventRuleParser rules.
@@ -666,6 +670,51 @@ func (s *CompareContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	}
 }
 
+type ExistsOrNotContext struct {
+	*ExpressionContext
+	op antlr.Token
+}
+
+func NewExistsOrNotContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *ExistsOrNotContext {
+	var p = new(ExistsOrNotContext)
+
+	p.ExpressionContext = NewEmptyExpressionContext()
+	p.parser = parser
+	p.CopyFrom(ctx.(*ExpressionContext))
+
+	return p
+}
+
+func (s *ExistsOrNotContext) GetOp() antlr.Token { return s.op }
+
+func (s *ExistsOrNotContext) SetOp(v antlr.Token) { s.op = v }
+
+func (s *ExistsOrNotContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *ExistsOrNotContext) VAR() antlr.TerminalNode {
+	return s.GetToken(EventRuleParserVAR, 0)
+}
+
+func (s *ExistsOrNotContext) EXISTS() antlr.TerminalNode {
+	return s.GetToken(EventRuleParserEXISTS, 0)
+}
+
+func (s *ExistsOrNotContext) NOTEXISTS() antlr.TerminalNode {
+	return s.GetToken(EventRuleParserNOTEXISTS, 0)
+}
+
+func (s *ExistsOrNotContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case EventRuleVisitor:
+		return t.VisitExistsOrNot(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 type AndOrContext struct {
 	*ExpressionContext
 	op antlr.Token
@@ -816,7 +865,7 @@ func (p *EventRuleParser) expression(_p int) (localctx IExpressionContext) {
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(41)
+	p.SetState(43)
 	p.GetErrorHandler().Sync(p)
 	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 1, p.GetParserRuleContext()) {
 	case 1:
@@ -830,7 +879,7 @@ func (p *EventRuleParser) expression(_p int) (localctx IExpressionContext) {
 		}
 		{
 			p.SetState(9)
-			p.expression(9)
+			p.expression(10)
 		}
 
 	case 2:
@@ -1060,30 +1109,57 @@ func (p *EventRuleParser) expression(_p int) (localctx IExpressionContext) {
 		}
 
 	case 8:
-		localctx = NewVariableContext(p, localctx)
+		localctx = NewExistsOrNotContext(p, localctx)
 		p.SetParserRuleContext(localctx)
 		_prevctx = localctx
 		{
 			p.SetState(38)
 			p.Match(EventRuleParserVAR)
 		}
-
-	case 9:
-		localctx = NewNotVariableContext(p, localctx)
-		p.SetParserRuleContext(localctx)
-		_prevctx = localctx
 		{
 			p.SetState(39)
-			p.Match(EventRuleParserNOT)
+
+			var _lt = p.GetTokenStream().LT(1)
+
+			localctx.(*ExistsOrNotContext).op = _lt
+
+			_la = p.GetTokenStream().LA(1)
+
+			if !(_la == EventRuleParserEXISTS || _la == EventRuleParserNOTEXISTS) {
+				var _ri = p.GetErrorHandler().RecoverInline(p)
+
+				localctx.(*ExistsOrNotContext).op = _ri
+			} else {
+				p.GetErrorHandler().ReportMatch(p)
+				p.Consume()
+			}
 		}
+
+	case 9:
+		localctx = NewVariableContext(p, localctx)
+		p.SetParserRuleContext(localctx)
+		_prevctx = localctx
 		{
 			p.SetState(40)
 			p.Match(EventRuleParserVAR)
 		}
 
+	case 10:
+		localctx = NewNotVariableContext(p, localctx)
+		p.SetParserRuleContext(localctx)
+		_prevctx = localctx
+		{
+			p.SetState(41)
+			p.Match(EventRuleParserNOT)
+		}
+		{
+			p.SetState(42)
+			p.Match(EventRuleParserVAR)
+		}
+
 	}
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(48)
+	p.SetState(50)
 	p.GetErrorHandler().Sync(p)
 	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 2, p.GetParserRuleContext())
 
@@ -1095,13 +1171,13 @@ func (p *EventRuleParser) expression(_p int) (localctx IExpressionContext) {
 			_prevctx = localctx
 			localctx = NewAndOrContext(p, NewExpressionContext(p, _parentctx, _parentState))
 			p.PushNewRecursionContext(localctx, _startState, EventRuleParserRULE_expression)
-			p.SetState(43)
+			p.SetState(45)
 
-			if !(p.Precpred(p.GetParserRuleContext(), 10)) {
-				panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 10)", ""))
+			if !(p.Precpred(p.GetParserRuleContext(), 11)) {
+				panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 11)", ""))
 			}
 			{
-				p.SetState(44)
+				p.SetState(46)
 
 				var _lt = p.GetTokenStream().LT(1)
 
@@ -1119,12 +1195,12 @@ func (p *EventRuleParser) expression(_p int) (localctx IExpressionContext) {
 				}
 			}
 			{
-				p.SetState(45)
-				p.expression(11)
+				p.SetState(47)
+				p.expression(12)
 			}
 
 		}
-		p.SetState(50)
+		p.SetState(52)
 		p.GetErrorHandler().Sync(p)
 		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 2, p.GetParserRuleContext())
 	}
@@ -1149,7 +1225,7 @@ func (p *EventRuleParser) Sempred(localctx antlr.RuleContext, ruleIndex, predInd
 func (p *EventRuleParser) Expression_Sempred(localctx antlr.RuleContext, predIndex int) bool {
 	switch predIndex {
 	case 0:
-		return p.Precpred(p.GetParserRuleContext(), 10)
+		return p.Precpred(p.GetParserRuleContext(), 11)
 
 	default:
 		panic("No predicate with index: " + fmt.Sprint(predIndex))
