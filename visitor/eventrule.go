@@ -114,6 +114,10 @@ func (v *Visitor) VisitCompare(ctx *parser.CompareContext) interface{} {
 
 func compare(name string, value interface{}, ctx *parser.CompareContext) bool {
 
+	if value == nil {
+		return false
+	}
+
 	result := false
 	if ctx.STRING() != nil {
 		strValue := ctx.STRING().GetText()
@@ -172,30 +176,29 @@ func (v *Visitor) VisitBoolCompare(ctx *parser.BoolCompareContext) interface{} {
 
 	varName := ctx.VAR().GetText()
 	if !strings.Contains(varName, "[") {
-		if v.m[varName] == nil {
-			v.pushValue(false)
-			return nil
-		}
-
-		v.pushValue(boolCompare(varName, fmt.Sprint(v.m[varName]), ctx))
+		v.pushValue(boolCompare(varName, v.m[varName], ctx))
 		return nil
 	}
 
 	v.pushValue(arrayOperator(v, varName, ctx.GetOp().GetTokenType(), func(value interface{}) bool {
-		return boolCompare(varName, fmt.Sprint(value), ctx)
+		return boolCompare(varName, value, ctx)
 	}))
 
 	return nil
 }
 
-func boolCompare(name, value string, ctx *parser.BoolCompareContext) bool {
+func boolCompare(name string, value interface{}, ctx *parser.BoolCompareContext) bool {
+
+	if value == nil {
+		return false
+	}
 
 	boolValue, err := strconv.ParseBool(ctx.BOOLEAN().GetText())
 	if err != nil {
 		panic(fmt.Errorf("%s is not bool", ctx.BOOLEAN().GetText()))
 	}
 
-	bv, err := strconv.ParseBool(value)
+	bv, err := strconv.ParseBool(fmt.Sprint(value))
 	if err != nil {
 		panic(fmt.Errorf("%s is not bool", value))
 	}
@@ -213,12 +216,7 @@ func (v *Visitor) VisitContainsOrNot(ctx *parser.ContainsOrNotContext) interface
 
 	varName := ctx.VAR().GetText()
 	if !strings.Contains(varName, "[") {
-		if v.m[varName] == nil {
-			v.pushValue(false)
-			return nil
-		}
-
-		v.pushValue(containsOrNot(varName, fmt.Sprint(v.m[varName]), ctx))
+		v.pushValue(containsOrNot(varName, v.m[varName], ctx))
 		return nil
 	}
 
@@ -229,7 +227,11 @@ func (v *Visitor) VisitContainsOrNot(ctx *parser.ContainsOrNotContext) interface
 	return nil
 }
 
-func containsOrNot(name, value string, ctx *parser.ContainsOrNotContext) bool {
+func containsOrNot(name string, value interface{}, ctx *parser.ContainsOrNotContext) bool {
+
+	if value == nil {
+		return false
+	}
 
 	node := ctx.STRING()
 	var strValue string
@@ -243,7 +245,7 @@ func containsOrNot(name, value string, ctx *parser.ContainsOrNotContext) bool {
 		strValue = node.GetText()
 	}
 
-	result := strings.Contains(value, strValue)
+	result := strings.Contains(fmt.Sprint(value), strValue)
 	if ctx.GetOp().GetTokenType() == parser.EventRuleParserNOTCONTAINS {
 		result = !result
 	}
@@ -256,22 +258,22 @@ func (v *Visitor) VisitInOrNot(ctx *parser.InOrNotContext) interface{} {
 
 	varName := ctx.VAR().GetText()
 	if !strings.Contains(varName, "[") {
-		if v.m[varName] == nil {
-			v.pushValue(false)
-			return nil
-		}
-
-		v.pushValue(inOrNot(varName, fmt.Sprint(v.m[varName]), ctx))
+		v.pushValue(inOrNot(varName, v.m[varName], ctx))
 		return nil
 	}
 
 	v.pushValue(arrayOperator(v, varName, ctx.GetOp().GetTokenType(), func(value interface{}) bool {
-		return inOrNot(varName, fmt.Sprint(value), ctx)
+		return inOrNot(varName, value, ctx)
 	}))
 	return nil
 }
 
-func inOrNot(name, value string, ctx *parser.InOrNotContext) bool {
+func inOrNot(name string, value interface{}, ctx *parser.InOrNotContext) bool {
+
+	if value == nil {
+		return false
+	}
+
 	var strValues []string
 	for _, p := range ctx.AllNUMBER() {
 		strValue := p.GetText()
@@ -287,7 +289,7 @@ func inOrNot(name, value string, ctx *parser.InOrNotContext) bool {
 
 	result := false
 	for _, strValue := range strValues {
-		if value == strValue {
+		if fmt.Sprint(value) == strValue {
 			result = true
 			break
 		}
@@ -305,22 +307,22 @@ func (v *Visitor) VisitRegexpOrNot(ctx *parser.RegexpOrNotContext) interface{} {
 
 	varName := ctx.VAR().GetText()
 	if !strings.Contains(varName, "[") {
-		if v.m[varName] == nil {
-			v.pushValue(false)
-			return nil
-		}
-
-		v.pushValue(regexpOrNot(varName, fmt.Sprint(v.m[varName]), ctx))
+		v.pushValue(regexpOrNot(varName, v.m[varName], ctx))
 		return nil
 	}
 
 	v.pushValue(arrayOperator(v, varName, ctx.GetOp().GetTokenType(), func(value interface{}) bool {
-		return regexpOrNot(varName, fmt.Sprint(value), ctx)
+		return regexpOrNot(varName, value, ctx)
 	}))
 	return nil
 }
 
-func regexpOrNot(name, value string, ctx *parser.RegexpOrNotContext) bool {
+func regexpOrNot(name string, value interface{}, ctx *parser.RegexpOrNotContext) bool {
+
+	if value == nil {
+		return false
+	}
+
 	strValue := ctx.STRING().GetText()
 	strValue = strings.TrimLeft(strValue, `"`)
 	strValue = strings.TrimRight(strValue, `"`)
@@ -337,7 +339,7 @@ func regexpOrNot(name, value string, ctx *parser.RegexpOrNotContext) bool {
 		pattern = rege.ReplaceAllString(pattern, "(.*)")
 	}
 
-	result, err := regexp.Match(pattern, []byte(value))
+	result, err := regexp.Match(pattern, []byte(fmt.Sprint(value)))
 	if err != nil {
 		panic(err)
 	}
@@ -359,11 +361,6 @@ func (v *Visitor) VisitNotVariable(ctx *parser.NotVariableContext) interface{} {
 
 func visitVariable(varName string, v *Visitor, flag bool) error {
 	if !strings.Contains(varName, "[") {
-		if v.m[varName] == nil {
-			v.pushValue(false)
-			return nil
-		}
-
 		v.pushValue(variable(varName, v, flag))
 		return nil
 	}
@@ -379,13 +376,14 @@ func variable(varName string, v *Visitor, flag bool) bool {
 
 	if v.m[varName] == nil {
 		return false
-	} else {
-		bv, err := strconv.ParseBool(fmt.Sprint(v.m[varName]))
-		if err != nil {
-			panic(fmt.Errorf("%s is not bool", v.m[varName]))
-		}
-		return bv == flag
 	}
+
+	bv, err := strconv.ParseBool(fmt.Sprint(v.m[varName]))
+	if err != nil {
+		panic(fmt.Errorf("%s is not bool", v.m[varName]))
+	}
+	return bv == flag
+
 }
 
 func (v *Visitor) VisitParenthesis(ctx *parser.ParenthesisContext) interface{} {
