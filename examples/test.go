@@ -1,55 +1,29 @@
-//for vistor pattern
+/*
+Copyright 2020 The KubeSphere Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package main
 
 import (
 	"encoding/json"
-	"flag"
 	"fmt"
 	"github.com/wanjunlei/event-rule-engine/visitor"
 	"io/ioutil"
 	"os"
-
-	"github.com/c-bata/go-prompt"
 )
 
-// Flatten takes a map and returns a new one where nested maps are replaced
-// by dot-delimited keys.
-//func Flatten(key string, v interface{}) map[string]interface{} {
-//	o := make(map[string]interface{})
-//
-//	switch v.(type) {
-//	case map[string]interface{}:
-//		for mk, mv := range v.(map[string]interface{}) {
-//			switch mv.(type) {
-//			case map[string]interface{}:
-//				nm := Flatten(mk, mv)
-//				for nk, nv := range nm {
-//					o[mk+"."+nk] = nv
-//				}
-//			case []interface{}:
-//				nm := Flatten(mk, mv)
-//				for nk, nv := range nm {
-//					o[nk] = nv
-//				}
-//			default:
-//				o[mk] = mv
-//			}
-//		}
-//	case []interface{}:
-//		for index,sv :=range v.([]interface{}) {
-//			sm := Flatten(key, sv)
-//			for nk, nv := range sm {
-//				//o[key + "[" + fmt.Sprint(index) + "]"+"."+nk] = nv
-//				o[key + "[" + fmt.Sprint(index) + "]"+"."+nk] = nv
-//			}
-//		}
-//	default:
-//		o[key] = v
-//
-//	}
-//
-//	return o
-//}
 func Flatten(m map[string]interface{}) map[string]interface{} {
 	o := make(map[string]interface{})
 	for k, v := range m {
@@ -69,7 +43,12 @@ func Flatten(m map[string]interface{}) map[string]interface{} {
 var fm map[string]interface{}
 
 func executor(in string) {
-	fmt.Println(visitor.CheckRule(in))
+
+	if _, err := visitor.CheckRule(in); err != nil {
+		fmt.Printf("rule condition is not correct, %s", err.Error())
+		return
+	}
+
 	err, res := visitor.EventRuleEvaluate(fm, in)
 	if err != nil {
 		fmt.Println(err)
@@ -78,14 +57,10 @@ func executor(in string) {
 	fmt.Printf("Answer: %v\n", res)
 }
 
-func completer(_ prompt.Document) []prompt.Suggest {
-	var ret []prompt.Suggest
-	return ret
-}
-
 func readJson() {
-	f, err := os.Open("test.json")
+	f, err := os.Open("examples//test.json")
 	if err != nil {
+		fmt.Println(err.Error())
 		return
 	}
 
@@ -102,13 +77,6 @@ func readJson() {
 }
 
 func main() {
-	flag.Parse()
 	readJson()
-	p := prompt.New(
-		executor,
-		completer,
-		prompt.OptionPrefix(">>> "),
-		prompt.OptionTitle("EventRuleEngine"),
-	)
-	p.Run()
+	executor("ResponseObject.status.images[*].names[*] contains \"kubesphere\"")
 }

@@ -1,3 +1,19 @@
+/*
+Copyright 2020 The KubeSphere Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package visitor
 
 import (
@@ -441,7 +457,6 @@ func CheckRule(expression string) (bool, error) {
 func EventRuleEvaluate(m map[string]interface{}, expression string) (error, bool) {
 
 	var err error
-
 	res := func() bool {
 		defer func() {
 			if i := recover(); i != nil {
@@ -450,14 +465,11 @@ func EventRuleEvaluate(m map[string]interface{}, expression string) (error, bool
 		}()
 
 		is := antlr.NewInputStream(expression)
-
 		// Create the Lexer
 		lexer := parser.NewEventRuleLexer(is)
 		tokens := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-
 		// Create the Parser
 		p := parser.NewEventRuleParser(tokens)
-
 		v := NewVisitor(m)
 		//Start is rule name of EventRule.g4
 		p.Start().Accept(v)

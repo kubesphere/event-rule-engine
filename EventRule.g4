@@ -16,8 +16,8 @@ IN: 'in';
 NOTIN: 'not in';
 LIKE: 'like';
 NOTLIKE: 'not like';
-REGEXP: 'regexp';
-NOTREGEXP: 'not regexp';
+REGEX: 'regex';
+NOTREGEX: 'not regex';
 EXISTS: 'exists';
 NOTEXISTS: 'not exists';
 COMMA: ',';
@@ -44,7 +44,7 @@ expression
    | VAR op=(EQU|NEQ) BOOLEAN                                           # BoolCompare
    | VAR op=(CONTAINS|NOTCONTAINS) (STRING|NUMBER)                      # ContainsOrNot
    | VAR op=(IN|NOTIN) '(' (NUMBER|STRING) (COMMA (NUMBER|STRING))* ')' # InOrNot
-   | VAR op=(REGEXP|NOTREGEXP|LIKE|NOTLIKE) STRING                      # RegexpOrNot
+   | VAR op=(REGEX|NOTREGEX|LIKE|NOTLIKE) STRING                        # RegexOrNot
    | VAR op=(EXISTS|NOTEXISTS)                                          # ExistsOrNot
    | VAR                                                                # Variable
    | NOT VAR                                                            # NotVariable
