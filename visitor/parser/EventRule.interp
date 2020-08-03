@@ -17,8 +17,8 @@ null
 'not in'
 'like'
 'not like'
-'regexp'
-'not regexp'
+'regex'
+'not regex'
 'exists'
 'not exists'
 ','
@@ -47,8 +47,8 @@ IN
 NOTIN
 LIKE
 NOTLIKE
-REGEXP
-NOTREGEXP
+REGEX
+NOTREGEX
 EXISTS
 NOTEXISTS
 COMMA

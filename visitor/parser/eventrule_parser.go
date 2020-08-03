@@ -49,13 +49,12 @@ var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
 var literalNames = []string{
 	"", "'('", "')'", "'and'", "'or'", "", "'='", "'!='", "'>'", "'<'", "'>='",
 	"'<='", "'contains'", "'not contains'", "'in'", "'not in'", "'like'", "'not like'",
-	"'regexp'", "'not regexp'", "'exists'", "'not exists'", "','",
+	"'regex'", "'not regex'", "'exists'", "'not exists'", "','",
 }
 var symbolicNames = []string{
 	"", "", "", "AND", "OR", "NOT", "EQU", "NEQ", "GT", "LT", "GTE", "LTE",
-	"CONTAINS", "NOTCONTAINS", "IN", "NOTIN", "LIKE", "NOTLIKE", "REGEXP",
-	"NOTREGEXP", "EXISTS", "NOTEXISTS", "COMMA", "NUMBER", "BOOLEAN", "STRING",
-	"VAR", "WHITESPACE",
+	"CONTAINS", "NOTCONTAINS", "IN", "NOTIN", "LIKE", "NOTLIKE", "REGEX", "NOTREGEX",
+	"EXISTS", "NOTEXISTS", "COMMA", "NUMBER", "BOOLEAN", "STRING", "VAR", "WHITESPACE",
 }
 
 var ruleNames = []string{
@@ -107,8 +106,8 @@ const (
 	EventRuleParserNOTIN       = 15
 	EventRuleParserLIKE        = 16
 	EventRuleParserNOTLIKE     = 17
-	EventRuleParserREGEXP      = 18
-	EventRuleParserNOTREGEXP   = 19
+	EventRuleParserREGEX       = 18
+	EventRuleParserNOTREGEX    = 19
 	EventRuleParserEXISTS      = 20
 	EventRuleParserNOTEXISTS   = 21
 	EventRuleParserCOMMA       = 22
@@ -347,6 +346,63 @@ func (s *InOrNotContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	}
 }
 
+type RegexOrNotContext struct {
+	*ExpressionContext
+	op antlr.Token
+}
+
+func NewRegexOrNotContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *RegexOrNotContext {
+	var p = new(RegexOrNotContext)
+
+	p.ExpressionContext = NewEmptyExpressionContext()
+	p.parser = parser
+	p.CopyFrom(ctx.(*ExpressionContext))
+
+	return p
+}
+
+func (s *RegexOrNotContext) GetOp() antlr.Token { return s.op }
+
+func (s *RegexOrNotContext) SetOp(v antlr.Token) { s.op = v }
+
+func (s *RegexOrNotContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *RegexOrNotContext) VAR() antlr.TerminalNode {
+	return s.GetToken(EventRuleParserVAR, 0)
+}
+
+func (s *RegexOrNotContext) STRING() antlr.TerminalNode {
+	return s.GetToken(EventRuleParserSTRING, 0)
+}
+
+func (s *RegexOrNotContext) REGEX() antlr.TerminalNode {
+	return s.GetToken(EventRuleParserREGEX, 0)
+}
+
+func (s *RegexOrNotContext) NOTREGEX() antlr.TerminalNode {
+	return s.GetToken(EventRuleParserNOTREGEX, 0)
+}
+
+func (s *RegexOrNotContext) LIKE() antlr.TerminalNode {
+	return s.GetToken(EventRuleParserLIKE, 0)
+}
+
+func (s *RegexOrNotContext) NOTLIKE() antlr.TerminalNode {
+	return s.GetToken(EventRuleParserNOTLIKE, 0)
+}
+
+func (s *RegexOrNotContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case EventRuleVisitor:
+		return t.VisitRegexOrNot(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 type NotContext struct {
 	*ExpressionContext
 }
@@ -502,63 +558,6 @@ func (s *VariableContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
 	case EventRuleVisitor:
 		return t.VisitVariable(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
-type RegexpOrNotContext struct {
-	*ExpressionContext
-	op antlr.Token
-}
-
-func NewRegexpOrNotContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *RegexpOrNotContext {
-	var p = new(RegexpOrNotContext)
-
-	p.ExpressionContext = NewEmptyExpressionContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*ExpressionContext))
-
-	return p
-}
-
-func (s *RegexpOrNotContext) GetOp() antlr.Token { return s.op }
-
-func (s *RegexpOrNotContext) SetOp(v antlr.Token) { s.op = v }
-
-func (s *RegexpOrNotContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *RegexpOrNotContext) VAR() antlr.TerminalNode {
-	return s.GetToken(EventRuleParserVAR, 0)
-}
-
-func (s *RegexpOrNotContext) STRING() antlr.TerminalNode {
-	return s.GetToken(EventRuleParserSTRING, 0)
-}
-
-func (s *RegexpOrNotContext) REGEXP() antlr.TerminalNode {
-	return s.GetToken(EventRuleParserREGEXP, 0)
-}
-
-func (s *RegexpOrNotContext) NOTREGEXP() antlr.TerminalNode {
-	return s.GetToken(EventRuleParserNOTREGEXP, 0)
-}
-
-func (s *RegexpOrNotContext) LIKE() antlr.TerminalNode {
-	return s.GetToken(EventRuleParserLIKE, 0)
-}
-
-func (s *RegexpOrNotContext) NOTLIKE() antlr.TerminalNode {
-	return s.GetToken(EventRuleParserNOTLIKE, 0)
-}
-
-func (s *RegexpOrNotContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case EventRuleVisitor:
-		return t.VisitRegexpOrNot(s)
 
 	default:
 		return t.VisitChildren(s)
@@ -1078,7 +1077,7 @@ func (p *EventRuleParser) expression(_p int) (localctx IExpressionContext) {
 		}
 
 	case 7:
-		localctx = NewRegexpOrNotContext(p, localctx)
+		localctx = NewRegexOrNotContext(p, localctx)
 		p.SetParserRuleContext(localctx)
 		_prevctx = localctx
 		{
@@ -1090,14 +1089,14 @@ func (p *EventRuleParser) expression(_p int) (localctx IExpressionContext) {
 
 			var _lt = p.GetTokenStream().LT(1)
 
-			localctx.(*RegexpOrNotContext).op = _lt
+			localctx.(*RegexOrNotContext).op = _lt
 
 			_la = p.GetTokenStream().LA(1)
 
-			if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<EventRuleParserLIKE)|(1<<EventRuleParserNOTLIKE)|(1<<EventRuleParserREGEXP)|(1<<EventRuleParserNOTREGEXP))) != 0) {
+			if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<EventRuleParserLIKE)|(1<<EventRuleParserNOTLIKE)|(1<<EventRuleParserREGEX)|(1<<EventRuleParserNOTREGEX))) != 0) {
 				var _ri = p.GetErrorHandler().RecoverInline(p)
 
-				localctx.(*RegexpOrNotContext).op = _ri
+				localctx.(*RegexOrNotContext).op = _ri
 			} else {
 				p.GetErrorHandler().ReportMatch(p)
 				p.Consume()

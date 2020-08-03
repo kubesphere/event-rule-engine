@@ -16,6 +16,10 @@ func (v *BaseEventRuleVisitor) VisitInOrNot(ctx *InOrNotContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseEventRuleVisitor) VisitRegexOrNot(ctx *RegexOrNotContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseEventRuleVisitor) VisitNot(ctx *NotContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -29,10 +33,6 @@ func (v *BaseEventRuleVisitor) VisitBoolCompare(ctx *BoolCompareContext) interfa
 }
 
 func (v *BaseEventRuleVisitor) VisitVariable(ctx *VariableContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseEventRuleVisitor) VisitRegexpOrNot(ctx *RegexpOrNotContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

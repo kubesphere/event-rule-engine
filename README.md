@@ -49,7 +49,7 @@ metadata.namespace contains "system"
 
 ### Regular comparision
 
-Operation supported: like, not like, regexp, not regexp
+Operation supported: like, not like, regex, not regex
 
 ```
 Examples
@@ -79,5 +79,5 @@ ResponseObject.status.images[28].names[0].names = "redis"
 
 ```
 Examples
-(metadata.namespace in ("kube-system", "default") or count >= 20) and (not open or involvedObject.apiVersion contains "v1")
+(metadata.namespace in ("kube-system", "default") or count >= 20) and involvedObject.apiVersion contains "v1"
 ```

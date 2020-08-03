@@ -14,6 +14,9 @@ type EventRuleVisitor interface {
 	// Visit a parse tree produced by EventRuleParser#InOrNot.
 	VisitInOrNot(ctx *InOrNotContext) interface{}
 
+	// Visit a parse tree produced by EventRuleParser#RegexOrNot.
+	VisitRegexOrNot(ctx *RegexOrNotContext) interface{}
+
 	// Visit a parse tree produced by EventRuleParser#Not.
 	VisitNot(ctx *NotContext) interface{}
 
@@ -25,9 +28,6 @@ type EventRuleVisitor interface {
 
 	// Visit a parse tree produced by EventRuleParser#Variable.
 	VisitVariable(ctx *VariableContext) interface{}
-
-	// Visit a parse tree produced by EventRuleParser#RegexpOrNot.
-	VisitRegexpOrNot(ctx *RegexpOrNotContext) interface{}
 
 	// Visit a parse tree produced by EventRuleParser#NotVariable.
 	VisitNotVariable(ctx *NotVariableContext) interface{}

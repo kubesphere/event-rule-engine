@@ -319,7 +319,7 @@ func inOrNot(name string, value interface{}, ctx *parser.InOrNotContext) bool {
 	return result
 }
 
-func (v *Visitor) VisitRegexpOrNot(ctx *parser.RegexpOrNotContext) interface{} {
+func (v *Visitor) VisitRegexpOrNot(ctx *parser.RegexOrNotContext) interface{} {
 
 	varName := ctx.VAR().GetText()
 	if !strings.Contains(varName, "[") {
@@ -333,7 +333,7 @@ func (v *Visitor) VisitRegexpOrNot(ctx *parser.RegexpOrNotContext) interface{} {
 	return nil
 }
 
-func regexpOrNot(name string, value interface{}, ctx *parser.RegexpOrNotContext) bool {
+func regexpOrNot(name string, value interface{}, ctx *parser.RegexOrNotContext) bool {
 
 	if value == nil {
 		return false
@@ -359,7 +359,7 @@ func regexpOrNot(name string, value interface{}, ctx *parser.RegexpOrNotContext)
 	if err != nil {
 		panic(err)
 	}
-	if ctx.GetOp().GetTokenType() == parser.EventRuleLexerNOTLIKE || ctx.GetOp().GetTokenType() == parser.EventRuleLexerNOTREGEXP {
+	if ctx.GetOp().GetTokenType() == parser.EventRuleLexerNOTLIKE || ctx.GetOp().GetTokenType() == parser.EventRuleLexerNOTREGEX {
 		result = !result
 	}
 
