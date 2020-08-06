@@ -1,4 +1,4 @@
-module github.com/wanjunlei/event-rule-engine
+module github.com/kubesphere/event-rule-engine
 
 go 1.12
 
