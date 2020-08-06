@@ -1,0 +1,562 @@
+{
+  "Annotations": {
+    "authorization.k8s.io/decision": "allow",
+    "authorization.k8s.io/reason": ""
+  },
+  "AuditID": "ca76e8b3-63ef-4f9e-9af6-851def38395c",
+  "ConsumeRetrys": 1,
+  "ConsumeTime": "2019-12-27T03:55:37.968468081Z",
+  "ImpersonatedUser": null,
+  "Level": false,
+  "MatchTime": "2019-12-27T03:55:38.053886462Z",
+  "Message": {
+    "0a14c3c7-0d42-41f1-979a-8da691bea63f": "system:node:ks-allinone 更新 了 节点 ks-allinone"
+  },
+  "ObjectRef": {
+    "APIGroup": "",
+    "APIVersion": "v1",
+    "Name": "ks-allinone",
+    "Namespace": "",
+    "Resource": "nodes",
+    "ResourceVersion": "",
+    "Subresource": "status",
+    "UID": ""
+  },
+  "OutputTime": "0001-01-01T00:00:00Z",
+  "PublishRetrys": 1,
+  "PublishTime": "2019-12-27T03:55:37.919559947Z",
+  "PullTime": "2019-12-27T03:55:37.972441141Z",
+  "ReceiviedTime": "2019-12-27T03:55:37.919548878Z",
+  "RequestObject": {
+    "status": {
+      "$setElementOrder/conditions": [
+        {
+          "type": "NetworkUnavailable"
+        },
+        {
+          "type": "MemoryPressure"
+        },
+        {
+          "type": "DiskPressure"
+        },
+        {
+          "type": "PIDPressure"
+        },
+        {
+          "type": "Ready"
+        }
+      ],
+      "conditions": [
+        {
+          "lastHeartbeatTime": "2019-12-27T03:55:32Z",
+          "type": "MemoryPressure"
+        },
+        {
+          "lastHeartbeatTime": "2019-12-27T03:55:32Z",
+          "type": "DiskPressure"
+        },
+        {
+          "lastHeartbeatTime": "2019-12-27T03:55:32Z",
+          "type": "PIDPressure"
+        },
+        {
+          "lastHeartbeatTime": "2019-12-27T03:55:32Z",
+          "type": "Ready"
+        }
+      ]
+    }
+  },
+  "RequestReceivedTimestamp": "2019-12-27T03:55:32.463587Z",
+  "RequestURI": "/api/v1/nodes/ks-allinone/status?timeout=10s",
+  "ResponseObject": {
+    "kind": "Node",
+    "apiVersion": "v1",
+    "metadata": {
+      "name": "ks-allinone",
+      "selfLink": "/api/v1/nodes/ks-allinone/status",
+      "uid": "a759cefa-d742-4d19-a285-3bb402138803",
+      "resourceVersion": "8752554",
+      "creationTimestamp": "2019-11-11T03:33:17Z",
+      "labels": {
+        "beta.kubernetes.io/arch": "amd64",
+        "beta.kubernetes.io/os": "linux",
+        "kubernetes.io/arch": "amd64",
+        "kubernetes.io/hostname": "ks-allinone",
+        "kubernetes.io/os": "linux",
+        "node-role.kubernetes.io/master": ""
+      },
+      "annotations": {
+        "alpha.kubernetes.io/provided-node-ip": "192.168.0.20",
+        "kubeadm.alpha.kubernetes.io/cri-socket": "/var/run/dockershim.sock",
+        "node.alpha.kubernetes.io/ttl": "0",
+        "volumes.kubernetes.io/controller-managed-attach-detach": "true"
+      }
+    },
+    "spec": {
+      "podCIDR": "10.233.64.0/24"
+    },
+    "status": {
+      "capacity": {
+        "cpu": "8",
+        "ephemeral-storage": "309502832Ki",
+        "hugepages-2Mi": "0",
+        "memory": "32780324Ki",
+        "pods": "110"
+      },
+      "allocatable": {
+        "cpu": "7800m",
+        "ephemeral-storage": "285237809499",
+        "hugepages-2Mi": "0",
+        "memory": "32177924Ki",
+        "pods": "110"
+      },
+      "conditions": [
+        {
+          "type": "NetworkUnavailable",
+          "status": "False",
+          "lastHeartbeatTime": "2019-12-24T07:08:41Z",
+          "lastTransitionTime": "2019-12-24T07:08:41Z",
+          "reason": "CalicoIsUp",
+          "message": "Calico is running on this node"
+        },
+        {
+          "type": "MemoryPressure",
+          "status": "False",
+          "lastHeartbeatTime": "2019-12-27T03:55:32Z",
+          "lastTransitionTime": "2019-12-24T08:04:22Z",
+          "reason": "KubeletHasSufficientMemory",
+          "message": "kubelet has sufficient memory available"
+        },
+        {
+          "type": "DiskPressure",
+          "status": "False",
+          "lastHeartbeatTime": "2019-12-27T03:55:32Z",
+          "lastTransitionTime": "2019-12-24T08:04:22Z",
+          "reason": "KubeletHasNoDiskPressure",
+          "message": "kubelet has no disk pressure"
+        },
+        {
+          "type": "PIDPressure",
+          "status": "False",
+          "lastHeartbeatTime": "2019-12-27T03:55:32Z",
+          "lastTransitionTime": "2019-12-24T08:04:22Z",
+          "reason": "KubeletHasSufficientPID",
+          "message": "kubelet has sufficient PID available"
+        },
+        {
+          "type": "Ready",
+          "status": "True",
+          "lastHeartbeatTime": "2019-12-27T03:55:32Z",
+          "lastTransitionTime": "2019-12-24T08:04:22Z",
+          "reason": "KubeletReady",
+          "message": "kubelet is posting ready status"
+        }
+      ],
+      "addresses": [
+        {
+          "type": "InternalIP",
+          "address": "192.168.0.20"
+        },
+        {
+          "type": "Hostname",
+          "address": "ks-allinone"
+        }
+      ],
+      "daemonEndpoints": {
+        "kubeletEndpoint": {
+          "Port": 10250
+        }
+      },
+      "nodeInfo": {
+        "machineID": "6e8163a216c035f3b80bd4325be8c430",
+        "systemUUID": "6E8163A2-16C0-35F3-B80B-D4325BE8C430",
+        "bootID": "6057446f-2f61-4185-b349-c1f5622126fc",
+        "kernelVersion": "3.10.0-862.el7.x86_64",
+        "osImage": "CentOS Linux 7 (Core)",
+        "containerRuntimeVersion": "docker://18.9.7",
+        "kubeletVersion": "v1.15.5",
+        "kubeProxyVersion": "v1.15.5",
+        "operatingSystem": "linux",
+        "architecture": "amd64"
+      },
+      "images": [
+        {
+          "names": [
+            "mirrorgitlabcontainers/gitaly@sha256:921e4cf80a42dcd52c8f30bb92bcb6ab6c0dec5b391f8c38d7942a9005741cde",
+            "mirrorgitlabcontainers/gitaly:v12-3-4"
+          ],
+          "sizeBytes": 1676374977
+        },
+        {
+          "names": [
+            "mirrorgitlabcontainers/gitlab-task-runner-ce@sha256:52eccaf96b1dc2b8d97c4a081b2004db47f6aed9ef57fee6451de614219f211f",
+            "mirrorgitlabcontainers/gitlab-task-runner-ce:v12.4.1"
+          ],
+          "sizeBytes": 1312186404
+        },
+        {
+          "names": [
+            "mirrorgitlabcontainers/gitlab-unicorn-ce@sha256:afd98c87a79bec7a4c421f0a991ae4f896bef4c6d9dd507f932627fa032cd24b",
+            "mirrorgitlabcontainers/gitlab-unicorn-ce:v12.4.1"
+          ],
+          "sizeBytes": 1233980870
+        },
+        {
+          "names": [
+            "mirrorgitlabcontainers/gitlab-sidekiq-ce@sha256:f31a9937f25d40272876e55c0ee1e207800b94f3ac83adbda24aebd633ecd405",
+            "mirrorgitlabcontainers/gitlab-sidekiq-ce:v12.4.1"
+          ],
+          "sizeBytes": 1149314249
+        },
+        {
+          "names": [
+            "mirrorgitlabcontainers/gitlab-rails-ce@sha256:e95c627e955e8e33cbde680b40af54f49073e1265a7688c6f4d9a1c0bd50130f",
+            "mirrorgitlabcontainers/gitlab-rails-ce:v12.4.1"
+          ],
+          "sizeBytes": 1127906476
+        },
+        {
+          "names": [
+            "sonarqube@sha256:7d7d88000121d368cc31d97bf2e98636cd743afb779878df41d075c16471c4e4",
+            "sonarqube:7.4-community"
+          ],
+          "sizeBytes": 830430283
+        },
+        {
+          "names": [
+            "kubesphere/elasticsearch-oss@sha256:795da1ec4a08fd30048471f7a731700c0781234970ff5d2be64029244c9288d3",
+            "kubesphere/elasticsearch-oss:6.7.0-1"
+          ],
+          "sizeBytes": 702164843
+        },
+        {
+          "names": [
+            "mirrorgitlabcontainers/gitlab-shell@sha256:374e5d82f137638f4c4016379656c4f2208fc04931cd92ce3c4e917cceed55e7",
+            "mirrorgitlabcontainers/gitlab-shell:v12-3-4"
+          ],
+          "sizeBytes": 689626912
+        },
+        {
+          "names": [
+            "quay.azk8s.cn/kubernetes-ingress-controller/nginx-ingress-controller@sha256:76861d167e4e3db18f2672fd3435396aaa898ddf4d1128375d7c93b91c59f87f",
+            "quay.azk8s.cn/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1"
+          ],
+          "sizeBytes": 631358200
+        },
+        {
+          "names": [
+            "gcr.azk8s.cn/google-containers/hyperkube@sha256:c0a2b93f543177574551262ba1cf9f005fa4d2a046c731070f1d39f829d50e5f",
+            "gcr.azk8s.cn/google-containers/hyperkube:v1.15.5"
+          ],
+          "sizeBytes": 593442254
+        },
+        {
+          "names": [
+            "jenkins/jenkins@sha256:5a1ac8381051dc430dcc90077f648ed1e1b91149b5808a8dea507639eefc563f",
+            "jenkins/jenkins:2.176.2"
+          ],
+          "sizeBytes": 567041724
+        },
+        {
+          "names": [
+            "mirrorgitlabcontainers/gitlab-workhorse-ce@sha256:96087f030e3cf288fec7311ed6ee74a83181dd23f08d698c950831398b001e0d",
+            "mirrorgitlabcontainers/gitlab-workhorse-ce:v12.4.1"
+          ],
+          "sizeBytes": 499998452
+        },
+        {
+          "names": [
+            "kubesphere/ks-installer@sha256:b9f240b40772a192d96c538587e85bc38470d79777146093ed2ec6b24b7bbc1a",
+            "kubesphere/ks-installer:v2.1.0"
+          ],
+          "sizeBytes": 485510075
+        },
+        {
+          "names": [
+            "kubesphere/ks-installer@sha256:a2a652d87e2a83cb629b861a350d20184f8c30c8cf1d651b7519b92ba910e608"
+          ],
+          "sizeBytes": 485506488
+        },
+        {
+          "names": [
+            "docker.elastic.co/kibana/kibana-oss@sha256:9af7fbceb7c9a746df1f7dc79d2b3bb320f0fddf9b06a3cc12fd8f903902e731",
+            "dockerhub.qingcloud.com/kibana/kibana-oss@sha256:9af7fbceb7c9a746df1f7dc79d2b3bb320f0fddf9b06a3cc12fd8f903902e731",
+            "docker.elastic.co/kibana/kibana-oss:6.7.0",
+            "dockerhub.qingcloud.com/kibana/kibana-oss:6.7.0"
+          ],
+          "sizeBytes": 452698702
+        },
+        {
+          "names": [
+            "mysql@sha256:ffa442557c7a350939d9cd531f77d6cbb98e868aeb4a328289e0e5469101c20e",
+            "mysql:8.0.11"
+          ],
+          "sizeBytes": 444743757
+        },
+        {
+          "names": [
+            "kubesphere/jenkins-uc@sha256:1d5890eb49034bf6b1225e8e69757c2edddc2237041c6ee22a29e62cb40997f8",
+            "kubesphere/jenkins-uc:v2.1.0"
+          ],
+          "sizeBytes": 418780984
+        },
+        {
+          "names": [
+            "istio/proxyv2@sha256:ba3471a9749893afe80f7d8f11119bf0148ffe0f4eaf3f9da66bb27076a8c2a6",
+            "istio/proxyv2:1.3.3"
+          ],
+          "sizeBytes": 295718548
+        },
+        {
+          "names": [
+            "osixia/openldap@sha256:cb3f5fea3c3203acddc3e6b8a70642a0f994d89be3ec5f0e50621b2a9ea17a83",
+            "osixia/openldap:1.3.0"
+          ],
+          "sizeBytes": 275387335
+        },
+        {
+          "names": [
+            "istio/galley@sha256:a5c96c260e619d6756b21638b884b41739f0bbf587b0411f26e8cfe85e18534a",
+            "istio/galley:1.3.3"
+          ],
+          "sizeBytes": 270111146
+        },
+        {
+          "names": [
+            "jaegertracing/jaeger-operator@sha256:e0123c1f74095abc12efd8e5d115ea5b52a5219680e03de25c54ed50b0528010",
+            "jaegertracing/jaeger-operator:1.13.1"
+          ],
+          "sizeBytes": 270105291
+        },
+        {
+          "names": [
+            "istio/pilot@sha256:a599c6c5712e266136fe58296c41b9fb9eebe462eff2bf0f02f5c0ad9caea2ea",
+            "istio/pilot:1.3.3"
+          ],
+          "sizeBytes": 268607205
+        },
+        {
+          "names": [
+            "istio/sidecar_injector@sha256:ebd3623f456261d0343f7a51312dc1093420164e5b03e1f7a05c89654f3718a6",
+            "istio/sidecar_injector:1.3.3"
+          ],
+          "sizeBytes": 256912673
+        },
+        {
+          "names": [
+            "grafana/grafana@sha256:aaf50da5faf2596bfb0caed81f08b5569110e7b5468b291fedad25d8cbc51f2b",
+            "grafana/grafana:5.2.4"
+          ],
+          "sizeBytes": 245249907
+        },
+        {
+          "names": [
+            "istio/citadel@sha256:6693cf372064c5edb41462cf92e03354098689cacfb9229e93ef4b35e3f7109a",
+            "istio/citadel:1.3.3"
+          ],
+          "sizeBytes": 241425010
+        },
+        {
+          "names": [
+            "postgres@sha256:6e1efcd656386fc0c0a9893fda0c0ec6704868fbaad5ad5be3732c4f81cf21c9",
+            "postgres:9.6.8"
+          ],
+          "sizeBytes": 234295589
+        },
+        {
+          "names": [
+            "mirrorgitlabcontainers/gitlab-exporter@sha256:589bc9619b5510e296b65dea11494cd82abd102cdd09cec604ec8ed4dd18f3b0",
+            "mirrorgitlabcontainers/gitlab-exporter:5.0.1"
+          ],
+          "sizeBytes": 220101805
+        },
+        {
+          "names": [
+            "goharbor/clair-photon@sha256:552085c21a422cc5ce445f4cd11775e3ffdea34ea09d1005e1812b76df9e9d1a",
+            "goharbor/clair-photon:v2.0.9-v1.9.1"
+          ],
+          "sizeBytes": 165468718
+        },
+        {
+          "names": [
+            "quay.azk8s.cn/openebs/node-disk-manager-amd64@sha256:476aab4d4bcfa3f0eead5216cf17f7e3c52d2f80181857a47d9c5ed8921b4059",
+            "quay.azk8s.cn/openebs/node-disk-manager-amd64:v0.4.1"
+          ],
+          "sizeBytes": 162565094
+        },
+        {
+          "names": [
+            "quay.azk8s.cn/openebs/node-disk-operator-amd64@sha256:a031f3b27fcef14df5b9c51cff93d9a4fc9de0630c4356c90c5e1a63d9426683",
+            "quay.azk8s.cn/openebs/node-disk-operator-amd64:v0.4.1"
+          ],
+          "sizeBytes": 162281289
+        },
+        {
+          "names": [
+            "mirrorgitlabcontainers/kubectl@sha256:fa15ba466920eec245d455e9e5e679a1e62fd401106b21cf0428e360ac747cb7",
+            "mirrorgitlabcontainers/kubectl:v1.12.10"
+          ],
+          "sizeBytes": 157327901
+        },
+        {
+          "names": [
+            "calico/node@sha256:a2782b53500c96e35299b8af729eaf39423f9ffd903d9fda675073f4a063502a",
+            "calico/node:v3.7.3"
+          ],
+          "sizeBytes": 156259173
+        },
+        {
+          "names": [
+            "goharbor/harbor-core@sha256:6e4e9fd9af9dd934cd2c6846804a280cc22a705a87c8fe669adca1be1514aa8d",
+            "goharbor/harbor-core:v1.9.1"
+          ],
+          "sizeBytes": 155419477
+        },
+        {
+          "names": [
+            "kubesphere/ks-devops@sha256:25e0d1b94e909299eb3b9ae4a562225e89de51e0aea58b44bac28355682ed0b8",
+            "kubesphere/ks-devops:flyway-v2.1.0"
+          ],
+          "sizeBytes": 149083741
+        },
+        {
+          "names": [
+            "goharbor/harbor-db@sha256:6fce5c0b83f647fb13a05bba30595a1a6cda206352351454b47ffb40e0696201",
+            "goharbor/harbor-db:v1.9.1"
+          ],
+          "sizeBytes": 146777706
+        },
+        {
+          "names": [
+            "openpitrix/openpitrix@sha256:1bc0a2fa0709f3ecd8246e19836eebca187f74843899ed6b87e2d6530e3cc5aa",
+            "openpitrix/openpitrix:v0.4.5"
+          ],
+          "sizeBytes": 145053372
+        },
+        {
+          "names": [
+            "kubesphere/docker-elasticsearch-curator@sha256:bec03e6bc395556065100c57c562745953b272d2d6d98516309a72b4f97b57e5",
+            "dockerhub.qingcloud.com/pires/docker-elasticsearch-curator@sha256:bec03e6bc395556065100c57c562745953b272d2d6d98516309a72b4f97b57e5",
+            "kubesphere/docker-elasticsearch-curator:5.5.4",
+            "dockerhub.qingcloud.com/pires/docker-elasticsearch-curator:5.5.4"
+          ],
+          "sizeBytes": 141725506
+        },
+        {
+          "names": [
+            "goharbor/harbor-jobservice@sha256:14c82514489c9bc3e9d597f37b7023c6d79250dbfcdec90cc9d96e26cc9d687d",
+            "goharbor/harbor-jobservice:v1.9.1"
+          ],
+          "sizeBytes": 140885196
+        },
+        {
+          "names": [
+            "kubesphere/alerting-dbinit@sha256:1f447101d9aa1c2e01e34ed8f9f5a79537c2d904986565701d08f9e498d219ef",
+            "kubesphere/alerting-dbinit:v2.1.0"
+          ],
+          "sizeBytes": 137663833
+        },
+        {
+          "names": [
+            "kubesphere/notification@sha256:48303e0b8ead5b75534e9c2dc0aecb110c6f2d6f9d5811f2bb1e7a3432dd9a7b",
+            "kubesphere/notification:flyway_v2.1.0"
+          ],
+          "sizeBytes": 137651934
+        },
+        {
+          "names": [
+            "calico/cni@sha256:258a0cb3c25022e44ebda3606112c40865adb67b8fb7be3d119f960957301ad6",
+            "calico/cni:v3.7.3"
+          ],
+          "sizeBytes": 135366007
+        },
+        {
+          "names": [
+            "goharbor/chartmuseum-photon@sha256:9c00a72dae0664f950d8c3a4176bbe5c0e29a3d331d2fa3faf86c9b0cef64565",
+            "goharbor/chartmuseum-photon:v0.9.0-v1.9.1"
+          ],
+          "sizeBytes": 130900423
+        },
+        {
+          "names": [
+            "goharbor/redis-photon@sha256:ab3a6acca6a2ae994f2a94b640155d66df7b7a7acf6a6a22e9b2a9520f1a47a9",
+            "goharbor/redis-photon:v1.9.1"
+          ],
+          "sizeBytes": 109603121
+        },
+        {
+          "names": [
+            "kubesphere/ks-controller-manager@sha256:6903e90a8a829813eb2ae720bed824f223da5ccab6f0d6efced5547da6f85f0c",
+            "kubesphere/ks-controller-manager:v2.1.0"
+          ],
+          "sizeBytes": 104773250
+        },
+        {
+          "names": [
+            "kubesphere/prometheus@sha256:60c989c93c8097ef7719c1b3b0f4dc54ea61b5e836c222258a5d9512fb3e6181",
+            "kubesphere/prometheus:v2.5.0"
+          ],
+          "sizeBytes": 99822269
+        },
+        {
+          "names": [
+            "goharbor/harbor-registryctl@sha256:94411f782c3e457e88b1ef0c9baf728593a84eee83faa60873b000c2d5f50739",
+            "goharbor/harbor-registryctl:v1.9.1"
+          ],
+          "sizeBytes": 99625273
+        },
+        {
+          "names": [
+            "gcr.azk8s.cn/kubernetes-helm/tiller@sha256:c09393087c4be55023f86be979a9dfe486c728703eba996344adc9783f261baa",
+            "gcr.azk8s.cn/kubernetes-helm/tiller:v2.14.3"
+          ],
+          "sizeBytes": 94194761
+        },
+        {
+          "names": [
+            "istio/mixer@sha256:5127f49cea52b6dcbb409fbffc64523b0d4c894d5722c9f97627e5e285a4b11d",
+            "istio/mixer:1.3.3"
+          ],
+          "sizeBytes": 92748552
+        },
+        {
+          "names": [
+            "kubesphere/ks-apigateway@sha256:62b00bcde6253279365d48656ab9255f51769aa2b45aba4ade8ffb83ea48a6d9",
+            "kubesphere/ks-apigateway:v2.1.0"
+          ],
+          "sizeBytes": 84836366
+        },
+        {
+          "names": [
+            "kubesphere/ks-console@sha256:7dec766d47ac92821535a55fbf63f783bb4d4ba9ac096f8643ca0fbbf52c2acc",
+            "kubesphere/ks-console:v2.1.0"
+          ],
+          "sizeBytes": 82901991
+        }
+      ]
+    }
+  },
+  "ResponseStatus": {
+    "code": 200,
+    "metadata": {}
+  },
+  "Rules": [
+    "0a14c3c7-0d42-41f1-979a-8da691bea63f"
+  ],
+  "SourceIPs": [
+    "192.168.0.20"
+  ],
+  "Stage": "ResponseComplete",
+  "StageTimestamp": "2019-12-27T03:55:32.467976Z",
+  "User": {
+    "Extra": null,
+    "Groups": [
+      "system:nodes",
+      "system:authenticated"
+    ],
+    "UID": "",
+    "Username": "system:node:ks-allinone"
+  },
+  "UserAgent": "kubelet/v1.15.5 (linux/amd64) kubernetes/20c265f",
+  "Verb": "patch"
+}
