@@ -22,7 +22,7 @@ import (
 	"fmt"
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 	"github.com/golang/glog"
-	"github.com/wanjunlei/event-rule-engine/visitor/parser"
+	"github.com/kubesphere/event-rule-engine/visitor/parser"
 	"regexp"
 	"strconv"
 	"strings"
@@ -319,21 +319,21 @@ func inOrNot(name string, value interface{}, ctx *parser.InOrNotContext) bool {
 	return result
 }
 
-func (v *Visitor) VisitRegexpOrNot(ctx *parser.RegexOrNotContext) interface{} {
+func (v *Visitor) VisitRegexOrNot(ctx *parser.RegexOrNotContext) interface{} {
 
 	varName := ctx.VAR().GetText()
 	if !strings.Contains(varName, "[") {
-		v.pushValue(regexpOrNot(varName, v.m[varName], ctx))
+		v.pushValue(regexOrNot(varName, v.m[varName], ctx))
 		return nil
 	}
 
 	v.pushValue(arrayOperator(v, varName, ctx.GetOp().GetTokenType(), func(value interface{}) bool {
-		return regexpOrNot(varName, value, ctx)
+		return regexOrNot(varName, value, ctx)
 	}))
 	return nil
 }
 
-func regexpOrNot(name string, value interface{}, ctx *parser.RegexOrNotContext) bool {
+func regexOrNot(name string, value interface{}, ctx *parser.RegexOrNotContext) bool {
 
 	if value == nil {
 		return false
@@ -348,11 +348,11 @@ func regexpOrNot(name string, value interface{}, ctx *parser.RegexOrNotContext) 
 
 		pattern = strings.ReplaceAll(pattern, "?", ".")
 
-		rege, err := regexp.Compile("(\\*)+")
+		regex, err := regexp.Compile("(\\*)+")
 		if err != nil {
 			panic(err)
 		}
-		pattern = rege.ReplaceAllString(pattern, "(.*)")
+		pattern = regex.ReplaceAllString(pattern, "(.*)")
 	}
 
 	result, err := regexp.Match(pattern, []byte(fmt.Sprint(value)))
@@ -488,7 +488,7 @@ func arrayOperator(v *Visitor, varName string, tokenType int, match func(value i
 	if strings.HasSuffix(varName, "]") &&
 		tokenType != parser.EventRuleParserNOTCONTAINS &&
 		tokenType != parser.EventRuleParserCONTAINS {
-		panic("array only suport contains or not contains method")
+		panic("array only support contains or not contains method")
 	}
 
 	ss := strings.Split(varName, ".")
@@ -520,16 +520,16 @@ func arrayOperator(v *Visitor, varName string, tokenType int, match func(value i
 		return false
 	}
 
-	cvalue, op, err := getChildValue(ss[0], value)
+	childValue, op, err := getChildValue(ss[0], value)
 	if err != nil {
 		panic(err)
 	}
 
-	if cvalue == nil || len(cvalue) == 0 {
+	if childValue == nil || len(childValue) == 0 {
 		return false
 	}
 
-	return arrayMatch(op, cvalue, ss[1:], match)
+	return arrayMatch(op, childValue, ss[1:], match)
 }
 
 func arrayMatch(op int, value []interface{}, array []string, match func(value interface{}) bool) bool {
@@ -550,33 +550,33 @@ func arrayMatch(op int, value []interface{}, array []string, match func(value in
 				key = key[0:strings.Index(key, "[")]
 			}
 
-			subvalue, ok := v.(map[string]interface{})[key]
+			subValue, ok := v.(map[string]interface{})[key]
 			if !ok && op == ArrayOperatorAll {
 				return false
 			}
 
 			cop := 0
-			var cvalue []interface{}
+			var childValue []interface{}
 			if strings.Contains(s, "[") {
-				if !isArray(subvalue) {
+				if !isArray(subValue) {
 					panic("the value not a array")
 				}
 
 				var err error
-				cvalue, cop, err = getChildValue(s, subvalue.([]interface{}))
+				childValue, cop, err = getChildValue(s, subValue.([]interface{}))
 				if err != nil {
 					panic(err)
 				}
 
-				if cvalue == nil || len(cvalue) == 0 {
+				if childValue == nil || len(childValue) == 0 {
 					return false
 				}
 			} else {
-				cvalue = append(cvalue, subvalue)
+				childValue = append(childValue, subValue)
 				cop = ArrayOperatorAny
 			}
 
-			b = arrayMatch(cop, cvalue, array[1:], match)
+			b = arrayMatch(cop, childValue, array[1:], match)
 		}
 
 		switch op {

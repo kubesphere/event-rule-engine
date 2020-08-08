@@ -19,7 +19,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/wanjunlei/event-rule-engine/visitor"
+	"github.com/kubesphere/event-rule-engine/visitor"
 	"io/ioutil"
 	"os"
 )
