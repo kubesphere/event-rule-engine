@@ -4,7 +4,7 @@ grammar EventRule;
 AND: 'and';
 OR: 'or';
 NOT: 'not' | '!';
-EQU: '=';
+EQU: '=' | '==';
 NEQ: '!=';
 GT: '>';
 LT: '<';
