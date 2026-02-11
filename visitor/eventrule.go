@@ -20,12 +20,14 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/antlr/antlr4/runtime/Go/antlr"
-	"github.com/golang/glog"
-	"github.com/kubesphere/event-rule-engine/visitor/parser"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/golang/glog"
+
+	"github.com/kubesphere/event-rule-engine/visitor/parser"
 )
 
 const (
@@ -510,7 +512,10 @@ func arrayOperator(v *Visitor, varName string, tokenType int, match func(value i
 		return false
 	}
 
-	varValue := v.m[buf.String()]
+	varValue, ok := v.m[buf.String()]
+	if !ok {
+		return false
+	}
 	if !isArray(varValue) {
 		panic(fmt.Errorf("%s is not array", buf.String()))
 	}
