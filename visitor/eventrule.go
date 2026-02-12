@@ -556,7 +556,7 @@ func arrayMatch(op int, value []interface{}, array []string, match func(value in
 			}
 
 			subValue, ok := v.(map[string]interface{})[key]
-			if !ok && op == ArrayOperatorAll {
+			if !ok {
 				return false
 			}
 
